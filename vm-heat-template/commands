@@ -1,0 +1,17 @@
+heat stack-create liberty-ubuntu -P "vm_name=liberty-ubuntu" -f devstack.yaml  --poll
+heat stack-delete liberty-ubuntu -y
+
+heat stack-create mitaka1 -P "vm_name=mitaka1;az=nova:openstack-compute6;net2=network-340" -f devstack.yaml --poll
+heat stack-create mitaka2 -P "vm_name=mitaka2;az=nova:openstack-compute7;net2=network-341" -f devstack.yaml --poll
+heat stack-create mitaka3 -P "vm_name=mitaka3;az=nova:openstack-compute6;net2=network-342" -f devstack.yaml --poll
+heat stack-create mitaka4 -P "vm_name=mitaka4;az=nova:openstack-compute7;net2=network-343" -f devstack.yaml --poll
+heat stack-create mitaka5 -P "vm_name=mitaka5;az=nova:openstack-compute6;net2=network-344" -f devstack.yaml --poll
+heat stack-create mitaka6 -P "vm_name=mitaka6;az=nova:openstack-compute7;net2=network-345" -f devstack.yaml --poll
+heat stack-create mitaka7 -P "vm_name=mitaka7;az=nova:openstack-compute6;net2=network-346" -f devstack.yaml --poll
+heat stack-create mitaka8 -P "vm_name=mitaka8;az=nova:openstack-compute2;net2=network-347" -f devstack.yaml --poll
+heat stack-create mitaka9 -P "vm_name=mitaka9;az=nova:openstack-compute3;net2=network-348" -f devstack.yaml --poll
+heat stack-create mitaka10 -P "vm_name=mitaka10;az=nova:openstack-compute7;net2=network-349" -f devstack.yaml --poll
+
+
+nova list | grep -e " mitaka[0-9]* " | awk '{split($12,a,"="); if(a[1] == "avimgmt"){split(a[2],b,";");print b[1];}else{split($13,b,"="); print b[2];}}'
+

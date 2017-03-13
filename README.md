@@ -22,9 +22,11 @@ Once stack gets created successfully, it also shows the IP address assigned to e
 
 Following are the steps to install and bring up all mitaka services:
   - SCP the mitaka/ directory in this repository to the VM created in the previous step, and name it "files" on the destination.
-      > scp -r mitaka root@10.10.11.11:files
+ 
+  > scp -r mitaka root@10.10.11.11:files
   - SSH to the VM and run installer.sh script in files directory. The following command ssh'es to the VM, runs the script, and captures the output of the script execution in file install.out.
-      > ssh root@10.10.11.11 "script install.out -c files/installer.sh"
+
+  > ssh root@10.10.11.11 "script install.out -c files/installer.sh"
   - This installs and brings up several services on this VM: keystone, nova, neutron (ML2 with linuxbridge plugin), glance, horizon, and heat.
   - You should be able to access the horizon UI at http://\<VM-IP-Address\>/horizon
   

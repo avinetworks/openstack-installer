@@ -132,9 +132,9 @@ cp /root/files/neutron.conf /etc/neutron/
 cp /root/files/ml2_conf.ini /etc/neutron/plugins/ml2/
 cp /root/files/linuxbridge_agent.ini /etc/neutron/plugins/ml2/
 sed -i s/OVERLAY_INTERFACE_IP_ADDRESS/$my_ip/g /etc/neutron/plugins/ml2/linuxbridge_agent.ini
-cp files/l3_agent.ini /etc/neutron/
-cp files/dhcp_agent.ini /etc/neutron/
-cp files/metadata_agent.ini /etc/neutron/
+cp /root/files/l3_agent.ini /etc/neutron/
+cp /root/files/dhcp_agent.ini /etc/neutron/
+cp /root/files/metadata_agent.ini /etc/neutron/
 su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
 service nova-api restart
 service neutron-server restart
@@ -149,7 +149,7 @@ service nova-compute restart
 # dashboard
 
 apt-get install -y openstack-dashboard
-cp files/local_settings.py /etc/openstack-dashboard/local_settings.py
+cp /root/files/local_settings.py /etc/openstack-dashboard/local_settings.py
 service apache2 reload
 
 # heat

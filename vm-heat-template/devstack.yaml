@@ -14,6 +14,9 @@ parameters:
   flavor:
     type: string
     default: m1.xlarge
+  image:
+    type: string
+    default: ubuntu-14.04
 
 resources:
   devstack_vm:
@@ -21,7 +24,7 @@ resources:
     properties:
       name: { get_param: vm_name }
       flavor: { get_param: flavor }
-      image: ubuntu-14.04
+      image: { get_param: image }
       networks:
         - network: { get_param: net1 } 
         - network: { get_param: net2 }

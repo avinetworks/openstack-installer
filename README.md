@@ -4,7 +4,10 @@
 
 ### Setup a Ubuntu 14.04 VM with two interfaces properly configured
 
-Use the heat template in vm-heat-template directory to create your Ubuntu 14.04 VM. This template creates two interfaces: eth0 and eth1. Assumption is that the first interface (eth0) is used for providing for all OpenStack service APIs and is also used for communication between compute VMs. The second interface is used for external connectivity and floating IPs for compute VMs. The template also sets those  both interfaces for DHCP to obtain IP addresses. Also, it enables PasswordAuthentication for SSHing into the VM with root. And sets the password for root to "avi123"
+Use the heat template in vm-heat-template directory to create your Ubuntu 14.04 VM. This template assumes that you have a glance image named "14.04". To create one, download the 14.04 server image from https://cloud-images.ubuntu.com/releases/14.04.4/release/ubuntu-14.04-server-cloudimg-amd64-disk1.img and upload it your glance using the following command:
+   > glance image-create --name ubuntu-14.04 --disk-format qcow2 --container-format bare --file ./ubuntu-14.04-server-cloudimg-amd64-disk1.img --progress
+
+This template creates two interfaces: eth0 and eth1. Assumption is that the first interface (eth0) is used for providing for all OpenStack service APIs and is also used for communication between compute VMs. The second interface is used for external connectivity and floating IPs for compute VMs. The template also sets those  both interfaces for DHCP to obtain IP addresses. Also, it enables PasswordAuthentication for SSHing into the VM with root. And sets the password for root to "avi123"
 
 Configurable parameters for this template:
   - **flavor**: Default is to use m1.xlarge flavor (8 VCPUS, 16G RAM, 160G disk). You can create a larger flavor for a beefier VM for more extensive testing.

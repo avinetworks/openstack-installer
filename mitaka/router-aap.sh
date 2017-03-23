@@ -11,6 +11,9 @@ fi
 
 # figure out the port-id from lab credentials
 source ./lab_openrc.sh
+# add openstack-controller to /etc/hosts
+sed -i "s/10.10.16.82 openstack-controller\n//g" /etc/hosts
+echo "10.10.16.82 openstack-controller" >> /etc/hosts
 port_id=`neutron port-list | grep "$my_mac" | awk '{print $2;}'`
 
 

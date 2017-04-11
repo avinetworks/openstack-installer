@@ -47,3 +47,7 @@ EOF
 ifconfig eth1 up
 dhclient eth1
 
+# add hostname to /etc/hosts
+echo -n "127.0.0.1 " >> /etc/hosts
+cat /etc/hostname >> /etc/hosts
+

@@ -11,11 +11,12 @@ EOF
 chown -R aviuser:aviuser /home/aviuser/.ssh
 chmod 700 /home/aviuser/.ssh/authorized_keys
 
-# add key in root too
+# add keys in root too
 mkdir -p /root/.ssh
 chmod 700 /root/.ssh
 cat << EOF > /root/.ssh/authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCUqFpC+0FPbFWBEj02X7jEDu4JPReAsr32y/H+s1nPNgx+qfGdYjEcZDTbxpAviMdgL90og7r0jWfQGFLN2wAJe9leRG8NZa2WVNq4Xrx8G/sdXk1TpqVE5PCNT+xd+q9xK3hGpCcGGq46qspTtcZUkhb0MCXbTyPHNiLh3VlKpQv1zC554z9jYKetj8tR6bGuhdBGd9ths3H7Vzi9ZA5w3hzZU83kHJLTW/vD5deq72lehHCmOjFEBILoQGjg3VEjjhS/PfSf9JkCYfJeJhGwM1dkuveDN9ahJ43XAKXOlPLoUB3YvjoXhbfj+ob4NS328A52M38zdsIi+gHsFpuB root@avi-dev
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHTaoO7+AqUSHAk2DRVVGZVc8TYWvBo0rdbAo7DstD3hMqR4A0uA42KFsE2bRSMCz8kEjnG0cvH5FxbEVQGCt0NHzoM0jHk8g5AudRrloRJ/n+bYeWACtsmINi5m9r9CigrUWpQmQR4rTvwhCJPo9azOF0S63v6XNs4Vo+2LK1fr8KxC/dy1fy0cdpXvEva3Wp7AoyBxKagriwHy3Pp6OMroxh57r42H+RkhcYBhEb8uy++GPylXuGO77EWXhlcL1KfXJ0skYnwL9B2OCPnP8Opj0TDWxS6SwtY/WJIR/5eKTFeB5yeFRAwX2Wo9sr8Np86SKA0DUslJENGpa3ivHl root@avi-dev
 EOF
 chown -R root:root /root/.ssh
 chmod 700 /root/.ssh/authorized_keys

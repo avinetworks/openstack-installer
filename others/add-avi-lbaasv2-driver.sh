@@ -20,3 +20,4 @@ password="$avi_admin_passwd"
 EOF
 
 service neutron-server restart
+sleep 60

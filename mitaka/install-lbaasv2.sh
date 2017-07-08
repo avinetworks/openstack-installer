@@ -12,7 +12,7 @@ my_ip=`ifconfig $interface | grep "inet addr" | awk '{split($2, a, ":"); print a
 # lbaas
 git clone https://github.com/openstack/neutron-lbaas
 cd /root/neutron-lbaas
-git checkout origin/stable/mitaka -b mitaka
+git checkout mitaka-eol -b mitaka
 python setup.py sdist
 pip install dist/*tar.gz
 cd -
@@ -38,7 +38,7 @@ service neutron-server restart
 # lbaas-dashboard
 git clone https://git.openstack.org/openstack/neutron-lbaas-dashboard
 cd neutron-lbaas-dashboard
-git checkout origin/stable/mitaka -b mitaka
+git checkout mitaka-eol -b mitaka
 python setup.py sdist
 pip install dist/*tar.gz
 cd -

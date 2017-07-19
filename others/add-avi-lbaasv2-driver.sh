@@ -17,6 +17,7 @@ cat << EOF >> /etc/neutron/neutron.conf
 address=$avi_cntr_ip
 user=admin
 password="$avi_admin_passwd"
+cloud=openstack
 EOF
 
 service neutron-server restart

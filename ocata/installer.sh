@@ -49,7 +49,6 @@ service memcached restart
 service apache2 restart
 rm -f /var/lib/keystone/keystone.db
 
-echo "127.0.0.1  openstack-controller" >> /etc/hosts
 source /root/files/admin-openrc.sh
 openstack project create --domain default   --description "Service Project" service
 openstack project create --domain default   --description "Demo Project" demo

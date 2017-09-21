@@ -17,7 +17,7 @@ echo "10.10.16.82 openstack-controller" >> /etc/hosts
 port_id=`neutron port-list | grep "$my_mac" | awk '{print $2;}'`
 
 
-qrouters=`ip netns list | grep qrouter`
+qrouters=`ip netns list | grep qrouter | cut -f 1 -d ' '`
 aaplist=""
 for qr in $qrouters; do
     mac=`sudo ip netns exec $qr ifconfig | grep qg | awk '{print $5;}'`

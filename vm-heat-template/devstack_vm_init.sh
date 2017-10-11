@@ -26,6 +26,7 @@ chmod 700 /root/.ssh/authorized_keys
 # set root password to avi123
 sed -i s/PasswordAuthentication\ no/PasswordAuthentication\ yes/g /etc/ssh/sshd_config
 sed -i s/PermitRootLogin\ without-password/PermitRootLogin\ yes/g /etc/ssh/sshd_config
+sed -i 's/prohibit-password/yes/' /etc/ssh/sshd_config
 service ssh restart
 echo -e 'avi123\navi123' | passwd root
 

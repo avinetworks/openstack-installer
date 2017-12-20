@@ -159,6 +159,9 @@ minimum_diskGB = 12
 
 #OPTIONAL SEPARATION OF MANAGEMENT AND CONTROL + DATA and OPTIONAL VLAN INFORMATION
 #==================================================================================
+#control_data = {
+#    host1 : { 'ip': 'DATA_IP/24', 'gw' : 'DATA_GW', 'device': 'eth1' },
+#}
 
 #OPTIONAL STATIC ROUTE CONFIGURATION
 #===================================
@@ -358,7 +361,7 @@ env.enable_lbaas = True
 #env.vgw = {host1: {'vgw1':{'vn':'default-domain:admin:public:public', 'ipam-subnets': ['10.204.220.128/29', '10.204.220.136/29', 'gateway-routes': ['8.8.8.0/24', '1.1.1.0/24']}]},
 #                   'vgw2':{'vn':'default-domain:admin:public1:public1', 'ipam-subnets': ['10.204.220.144/29']}
 #          }
-env.vgw = {host1: {'vgw1':{'vn':'default-domain:admin:public:public', 'ipam-subnets': ['MY_IP_PREF128/25']}}}
+env.vgw = {host1: {'vgw1':{'vn':'default-domain:admin:public:public', 'ipam-subnets': ['DATA_PREF160/27']}}}
 
 #Definition for the Key used
 #--------------------------------------

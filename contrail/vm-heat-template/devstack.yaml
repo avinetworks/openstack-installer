@@ -6,6 +6,8 @@ parameters:
   az:
     type: string
     default: nova
+#  net2:
+#    type: string
   net1:
     type: string
     default: avimgmt
@@ -25,6 +27,7 @@ resources:
       image: { get_param: image }
       networks:
         - network: { get_param: net1 } 
+#        - network: { get_param: net2 }
       config_drive: True
       availability_zone: { get_param: az }
       user_data: { get_file: devstack_vm_init.sh }
@@ -33,3 +36,5 @@ resources:
 outputs:
   dev_address:
     value: { get_attr: [devstack_vm, networks, { get_param: net1 }, 0] }
+#  data_address:
+#    value: { get_attr: [devstack_vm, networks, { get_param: net2 }, 0] }

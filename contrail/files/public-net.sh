@@ -7,8 +7,8 @@ my_ip_pref=`ifconfig $interface | grep "inet addr" | awk '{split($2, a, ":"); sp
 
 # for floating IP and external connectivity
 # choose a small pool from the subnet from eth0
-POOL_START=${my_ip_pref}129
-POOL_END=${my_ip_pref}200
+POOL_START=${my_ip_pref}161
+POOL_END=${my_ip_pref}190
 GW=${my_ip_pref}1
 CIDR=${my_ip_pref}0/24
 

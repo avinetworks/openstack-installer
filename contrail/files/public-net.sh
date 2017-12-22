@@ -14,6 +14,8 @@ CIDR=${my_ip_pref}0/24
 
 echo 1 > /proc/sys/net/ipv4/conf/vhost0/proxy_arp
 echo 1 > /proc/sys/net/ipv4/conf/vgw1/proxy_arp
+echo "net.ipv4.conf.vhost0.proxy_arp = 1" >> /etc/sysctl.conf
+echo "net.ipv4.conf.vgw1.proxy_arp = 1" >> /etc/sysctl.conf
 
 export OS_USERNAME=admin
 export OS_AUTH_URL=http://localhost:5000/v2.0

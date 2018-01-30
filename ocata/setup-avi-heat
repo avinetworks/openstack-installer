@@ -1,5 +1,7 @@
 set -x
 
+# # explicitly set locale to avoid any pip install issues
+export LC_ALL=C
 # clone avi-heat
 cd /root
 git clone $HEAT_REPO

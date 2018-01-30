@@ -1,6 +1,9 @@
 set -x
 set -e
 
+# explicitly set locale to avoid any pip install issues
+export LC_ALL=C
+
 cp /root/files/demo-openrc.sh /root/
 cp /root/files/admin-openrc.sh /root/
 source /root/admin-openrc.sh

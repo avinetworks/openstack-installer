@@ -1,6 +1,9 @@
 set -e
 set -x
 
+# explicitly set locale to avoid any pip install issues
+export LC_ALL=C
+
 avi_cntr_ip="10.10.39.219"
 if [ $# -gt 0 ]; then
    avi_cntr_ip=$1

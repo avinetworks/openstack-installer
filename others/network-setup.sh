@@ -13,13 +13,35 @@ neutron router-gateway-set $routerid $extnetid
 
 # create couple of networks in admin tenant
 neutron net-create p1 --shared
-neutron subnet-create p1 10.0.1.0/24 --name p1
+neutron subnet-create p1 10.0.1.0/24 --name p1 --dns-nameserver 10.10.0.100
 #connect router to it
 subnetid=`openstack subnet show p1 | grep " id " | awk '{print $4;}'`
 neutron router-interface-add $routerid subnet=$subnetid
 
 neutron net-create p2 --shared
-neutron subnet-create p2 10.0.2.0/24 --name p2
+neutron subnet-create p2 10.0.2.0/24 --name p2 --dns-nameserver 10.10.0.100
 #connect router to it
 subnetid=`openstack subnet show p2 | grep " id " | awk '{print $4;}'`
+neutron router-interface-add $routerid subnet=$subnetid
+
+neutron net-create vip6 --shared
+neutron subnet-create vip6 \
+    --name vip6snw \
+    --ip-version 6 \
+    --ipv6_address_mode=dhcpv6-stateful \
+    --ipv6_ra_mode=dhcpv6-stateful \
+    a100::/64
+#connect router to it
+subnetid=`neutron subnet-show vip6snw -c 'id' --format 'value'`
+neutron router-interface-add $routerid subnet=$subnetid
+
+neutron net-create data6 --shared
+neutron subnet-create data6 \
+    --name data6snw \
+    --ip-version 6 \
+    --ipv6_address_mode=dhcpv6-stateful \
+    --ipv6_ra_mode=dhcpv6-stateful \
+    b100::/64
+#connect router to it
+subnetid=`neutron subnet-show data6snw -c 'id' --format 'value'`
 neutron router-interface-add $routerid subnet=$subnetid

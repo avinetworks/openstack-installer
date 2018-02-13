@@ -2,6 +2,9 @@
 echo "ubuntu:avi123" | chpasswd
 echo "root:avi123" | chpasswd
 
+# Note: proper name server is passed while creating subnet so that the
+# instance gets the nameserver. This is crucial for apt-get install to
+# work.
 #sed -i '1s/^/nameserver 10.10.0.100/' /etc/resolv.conf
 
 apt-get update
@@ -78,14 +81,18 @@ echo "server {
 	ssl_certificate     /root/cert.pem;
 	ssl_certificate_key /root/cert.key;
 
-	root /usr/share/nginx/www;
-	index index.html index.htm;
+	root /usr/share/nginx/html;
 
 	location / {
 		# First attempt to serve request as file, then
 		# as directory, then fall back to displaying a 404.
-		try_files $uri $uri/ =404;
+		# try_files $uri $uri/ =404;
+
+                index index.html index.htm;
 	}
-}" >> /etc/nginx/sites-enabled/default
+}" >| /etc/nginx/sites-enabled/default
+
+chmod 600 /root/cert.pem
+chmod 600 /root/cert.key
 
 service nginx restart

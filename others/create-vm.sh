@@ -4,7 +4,7 @@ set -x
 #source /root/files/admin-openrc.sh
 source /root/files/demo-openrc.sh
 
-netid=`neutron net-show p1 -c 'id' --format 'value'`
+netid=`neutron net-show p2 -c 'id' --format 'value'`
 net6id=`neutron net-show data6 -c 'id' --format 'value'`
 nova boot --flavor m1.se \
     --image trusty \

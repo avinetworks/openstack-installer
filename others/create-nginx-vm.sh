@@ -17,6 +17,8 @@ nova boot --flavor m1.se \
     --config-drive True \
     server1
 
+sleep 5
+
 # create client in vip ipv4 and vip6 network
 netid=`neutron net-show p2 -c 'id' --format 'value'`
 net6id=`neutron net-show vip6 -c 'id' --format 'value'`
@@ -27,6 +29,8 @@ nova boot --flavor m1.se \
     --user-data ./cloud-init-client.sh \
     --config-drive True \
     client1
+
+sleep 10
 
 # associate Floating IP to client
 p=`neutron port-list -c 'id' -c 'fixed_ips' --format 'value' | grep 10.0.2.20 | cut -d' ' -f1`

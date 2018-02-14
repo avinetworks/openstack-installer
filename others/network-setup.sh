@@ -28,7 +28,7 @@ neutron router-interface-add $routerid subnet=$subnetid
 
 # data ipv4 network
 neutron net-create p3 --shared
-neutron subnet-create p3 10.0.3.0/24 --name p2 --dns-nameserver 10.10.0.100
+neutron subnet-create p3 10.0.3.0/24 --name p3 --dns-nameserver 10.10.0.100
 #connect router to it
 subnetid=`openstack subnet show p3 | grep " id " | awk '{print $4;}'`
 neutron router-interface-add $routerid subnet=$subnetid

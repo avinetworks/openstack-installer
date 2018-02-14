@@ -97,3 +97,8 @@ echo "server {
 }" >| /etc/nginx/sites-enabled/default
 
 service nginx restart
+
+
+sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+service ssh restart

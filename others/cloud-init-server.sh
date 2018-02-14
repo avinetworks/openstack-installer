@@ -11,6 +11,7 @@ apt-get update
 apt-get install --force-yes -y nginx
 
 # For trusty manually run dhclient
+# TODO: put the following in /etc/rc.local to run on reboot
 dhclient -6 eth1
 
 #touch /usr/local/nginx/conf/cert.pem
@@ -42,7 +43,7 @@ BQUHAwEwCwYDVR0PBAQDAgWgMA0GCSqGSIb3DQEBBQUAA4GBAIZOS0SLxJFL9mnO
 LL25L4oOWKj7zDUsBT6h9fBm2uby6eI4KfiCU09JS9W4SY3FDA3es0C/znKyVroE
 CS3Luo4IcsBfO35aoWJdC64lo2UMFa2m6pPy8l32JYR6CwDtcFRjGXr26YiFOpuP
 1NHOf1CU33VAVtRGHo+AboiPK7uu
------END CERTIFICATE-----" >> /root/cert.pem
+-----END CERTIFICATE-----" >| /root/cert.pem
 
 echo "-----BEGIN PRIVATE KEY-----
 MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALCCswMJrO6noS7g
@@ -59,7 +60,10 @@ UaDNAkB5zs8Mtx5V6pBpGZoRaRWF3iTmjZ6s1tBtnK7LH/LeXNysIDb7RXF6Uqx0
 bJGl5dIbWRXoPRyIvnb+r482SLxAQ/3C7GXy6wFWtbX0/TkkC/edMQJAY1WWr5Ol
 Dvuq9lG4qd/YcafEAX5CqNIoRP76mAKFUWiSWelHpBepn+jBDMrxRg1ZEDCFZI+U
 lUyAwf/d3s+W6g==
------END PRIVATE KEY-----" >> /root/cert.key
+-----END PRIVATE KEY-----" >| /root/cert.key
+
+chmod 600 /root/cert.pem
+chmod 600 /root/cert.key
 
 touch /etc/nginx/sites-enabled/default
 echo "server {
@@ -91,8 +95,5 @@ echo "server {
                 index index.html index.htm;
 	}
 }" >| /etc/nginx/sites-enabled/default
-
-chmod 600 /root/cert.pem
-chmod 600 /root/cert.key
 
 service nginx restart

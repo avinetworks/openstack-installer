@@ -13,24 +13,24 @@ neutron router-gateway-set $routerid $extnetid
 
 # create couple of networks in admin tenant
 # mgmt network
-neutron net-create p1 --shared
-neutron subnet-create p1 10.0.1.0/24 --name p1 --dns-nameserver 10.10.0.100
+neutron net-create mgmt --shared
+neutron subnet-create mgmt 10.0.1.0/24 --name mgmtsnw --dns-nameserver 10.10.0.100
 #connect router to it
-subnetid=`openstack subnet show p1 | grep " id " | awk '{print $4;}'`
+subnetid=`openstack subnet show mgmtsnw | grep " id " | awk '{print $4;}'`
 neutron router-interface-add $routerid subnet=$subnetid
 
 # vip ipv4 network
-neutron net-create p2 --shared
-neutron subnet-create p2 10.0.2.0/24 --name p2 --dns-nameserver 10.10.0.100
+neutron net-create vip4 --shared
+neutron subnet-create vip4 10.0.2.0/24 --name vip4snw --dns-nameserver 10.10.0.100
 #connect router to it
-subnetid=`openstack subnet show p2 | grep " id " | awk '{print $4;}'`
+subnetid=`openstack subnet show vip4snw | grep " id " | awk '{print $4;}'`
 neutron router-interface-add $routerid subnet=$subnetid
 
 # data ipv4 network
-neutron net-create p3 --shared
-neutron subnet-create p3 10.0.3.0/24 --name p3 --dns-nameserver 10.10.0.100
+neutron net-create data4 --shared
+neutron subnet-create data4 10.0.3.0/24 --name data4snw --dns-nameserver 10.10.0.100
 #connect router to it
-subnetid=`openstack subnet show p3 | grep " id " | awk '{print $4;}'`
+subnetid=`openstack subnet show data4snw | grep " id " | awk '{print $4;}'`
 neutron router-interface-add $routerid subnet=$subnetid
 
 # vip ipv6 network

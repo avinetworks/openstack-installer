@@ -11,3 +11,5 @@ sleep 60
 ./cert1.sh
 ./cert2.sh
 cd /root/files/ && ./router-aap.sh && cd -
+sleep 10
+./set-clientvm-fip.sh

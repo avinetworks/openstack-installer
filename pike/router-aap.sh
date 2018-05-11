@@ -3,6 +3,7 @@ set -e
 interface="ens4"
 cidr="10.90.0.0/16"
 
+for e in `env | grep ^OS_ | cut -d'=' -f1`; do unset $e; done
 my_mac=`ifconfig $interface | grep "HWaddr" | awk '{print $5;}'`
 if [ -z "$my_mac" ]; then
     echo "Can't find mac!"

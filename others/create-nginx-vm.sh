@@ -33,3 +33,4 @@ openstack server create --flavor m1.se \
 sleep 5
 
 openstack server list
+sleep 5

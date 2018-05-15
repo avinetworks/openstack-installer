@@ -2,6 +2,7 @@ set -e
 set -x
 
 ./network-setup.sh
+cd /root/files/ && ./router-aap.sh && cd -
 ./set-roles.sh
 ./upload-nginx-image.sh
 sleep 60
@@ -10,6 +11,5 @@ sleep 60
 ./create-nginx-vm.sh
 ./cert1.sh
 ./cert2.sh
-cd /root/files/ && ./router-aap.sh && cd -
 sleep 10
 ./set-clientvm-fip.sh

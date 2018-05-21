@@ -40,7 +40,7 @@ su -s /bin/sh -c "keystone-manage db_sync" keystone
 keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
 keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
 keystone-manage bootstrap --bootstrap-password avi123 \
-  --bootstrap-admin-url http://$my_ip:35357/v3/ \
+  --bootstrap-admin-url http://$my_ip:5000/v3/ \
   --bootstrap-internal-url http://$my_ip:5000/v3/ \
   --bootstrap-public-url http://$my_ip:5000/v3/ \
   --bootstrap-region-id RegionOne

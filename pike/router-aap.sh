@@ -1,9 +1,8 @@
 set -x
 set -e
-interface="ens4"
+interface="eth1"
 cidr="10.90.0.0/16"
 
-for e in `env | grep ^OS_ | cut -d'=' -f1`; do unset $e; done
 my_mac=`ifconfig $interface | grep "HWaddr" | awk '{print $5;}'`
 if [ -z "$my_mac" ]; then
     echo "Can't find mac!"
@@ -12,13 +11,15 @@ fi
 
 # figure out the port-id from lab credentials
 source ./lab_openrc.sh
-# add openstack-controller to /etc/hosts
-sed -i "s/10.10.16.82 openstack-controller\n//g" /etc/hosts
-echo "10.10.16.82 openstack-controller" >> /etc/hosts
+
+# Resolve openstack-controller
+sed -i "s/nameserver 10.10.0.100\n//g" /etc/resolv.conf
+echo "nameserver 10.10.0.100" >> /etc/resolv.conf
+sed -i "s/search avi.local\n//g" /etc/resolv.conf
+echo "search avi.local" >> /etc/resolv.conf
+
 port_id=`neutron port-list | grep "$my_mac" | awk '{print $2;}'`
-
-
-qrouters=`ip netns list | grep qrouter | cut -f 1 -d ' '`
+qrouters=`ip netns list | grep qrouter`
 aaplist=""
 for qr in $qrouters; do
     mac=`sudo ip netns exec $qr ifconfig | grep qg | awk '{print $5;}'`

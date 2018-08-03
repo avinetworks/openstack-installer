@@ -11,9 +11,13 @@ fi
 
 # figure out the port-id from lab credentials
 source ./lab_openrc.sh
-# add openstack-controller to /etc/hosts
-sed -i "s/10.10.16.82 openstack-controller\n//g" /etc/hosts
-echo "10.10.16.82 openstack-controller" >> /etc/hosts
+
+# Resolve openstack-controller
+sed -i "s/nameserver 10.10.0.100\n//g" /etc/resolv.conf
+echo "nameserver 10.10.0.100" >> /etc/resolv.conf
+sed -i "s/search avi.local\n//g" /etc/resolv.conf
+echo "search avi.local" >> /etc/resolv.conf
+
 port_id=`neutron port-list | grep "$my_mac" | awk '{print $2;}'`
 
 aaplist="mac_address=$my_mac,ip_address=$cidr"

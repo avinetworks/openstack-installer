@@ -193,5 +193,5 @@ service heat-api restart
 service heat-api-cfn restart
 service heat-engine restart
 
-# to do: lbaas, lbaas-dashboard
+chown horizon /var/lib/openstack-dashboard/secret_key
 

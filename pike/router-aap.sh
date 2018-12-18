@@ -3,7 +3,6 @@ set -e
 interface="ens4"
 cidr="10.90.0.0/16"
 
-for e in `env | grep ^OS_ | cut -d'=' -f1`; do unset $e; done
 my_mac=`ifconfig $interface | grep "HWaddr" | awk '{print $5;}'`
 if [ -z "$my_mac" ]; then
     echo "Can't find mac!"
@@ -11,10 +10,13 @@ if [ -z "$my_mac" ]; then
 fi
 
 # Resolve openstack-controller
-sed -i "s/nameserver 10.10.0.100\n//g" /etc/resolv.conf
+sed -i "/nameserver/d" /etc/resolv.conf
+sed -i "/search/d" /etc/resolv.conf
 echo "nameserver 10.10.0.100" >> /etc/resolv.conf
-sed -i "s/search avi.local\n//g" /etc/resolv.conf
 echo "search avi.local" >> /etc/resolv.conf
+
+# Clean up any OS_ variables set
+for i in `env | grep OS_ | cut -d'=' -f1`;do unset $i;done
 
 # figure out the port-id from lab credentials
 source ./lab_openrc.sh

@@ -1,15 +1,13 @@
 set -x
 set -e
 
-export LC_ALL=C
-
 cp /root/files/demo-openrc.sh /root/
 cp /root/files/admin-openrc.sh /root/
 source /root/admin-openrc.sh
 
 apt-get update
 apt-get --yes install software-properties-common
-add-apt-repository -y cloud-archive:ocata
+add-apt-repository -y cloud-archive:newton
 apt-get update && apt-get -y dist-upgrade
 apt-get install -y python-openstackclient  python-pip git
 apt-get install -y ssh-client
@@ -18,7 +16,7 @@ apt-get install -y ssh-client
 export DEBIAN_FRONTEND=noninteractive
 apt-get -y install mariadb-server python-pymysql && service mysql restart
 mysqladmin -u root password avi123
-cp /root/files/mysqld_openstack.cnf /etc/mysql/mariadb.conf.d/99-openstack.cnf
+cp /root/files/mysqld_openstack.cnf /etc/mysql/conf.d/
 service mysql restart
 
 # install rabbitmq
@@ -27,9 +25,6 @@ service rabbitmq-server start
 rabbitmqctl add_user openstack avi123
 rabbitmqctl set_permissions openstack ".*" ".*" ".*"
 
-# get my ip
-interface=ens3
-my_ip=`ifconfig $interface | grep "inet addr" | awk '{split($2, a, ":"); print a[2];}'`
 
 # install keystone
 mysql -u root --password="avi123" -e "CREATE DATABASE keystone;"
@@ -40,29 +35,39 @@ apt-get -y install keystone apache2 libapache2-mod-wsgi memcached python-memcach
 cp /root/files/keystone.conf /etc/keystone/
 su -s /bin/sh -c "keystone-manage db_sync" keystone
 keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
-keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
-keystone-manage bootstrap --bootstrap-password avi123 \
-  --bootstrap-admin-url http://$my_ip:35357/v3/ \
-  --bootstrap-internal-url http://$my_ip:5000/v3/ \
-  --bootstrap-public-url http://$my_ip:5000/v3/ \
-  --bootstrap-region-id RegionOne
 
+cp /root/files/wsgi-keystone.conf /etc/apache2/sites-available/
+ln -s /etc/apache2/sites-available/wsgi-keystone.conf /etc/apache2/sites-enabled
 service memcached restart
 service apache2 restart
 rm -f /var/lib/keystone/keystone.db
 
-source /root/files/admin-openrc.sh
-openstack project create --domain default   --description "Service Project" service
-openstack project create --domain default   --description "Demo Project" demo
-openstack user create --domain default   --password avi123 demo
-openstack role create user
-openstack role add --project demo --user demo user
+interface=eth0
+my_ip=`ifconfig $interface | grep "inet addr" | awk '{split($2, a, ":"); print a[2];}'`
+
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack service create --name keystone --description "OpenStack Identity" identity
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack endpoint create --region RegionOne identity public http://$my_ip:5000/v3
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack endpoint create --region RegionOne identity internal http://$my_ip:5000/v3
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack endpoint create --region RegionOne identity admin http://$my_ip:35357/v3
+
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack domain create --description "Default Domain" default
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack project create --domain default --description "Admin Project" admin
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack user create --domain default --password avi123 admin
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack role create admin
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack role add --project admin --user admin admin
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack project create --domain default   --description "Service Project" service
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack project create --domain default   --description "Demo Project" demo
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack user create --domain default   --password avi123 demo
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack role create user
+OS_TOKEN=avi123 OS_URL=http://localhost:35357/v3 OS_IDENTITY_API_VERSION=3 openstack role add --project demo --user demo user
+
 
 # add glance
 mysql -u root --password="avi123" -e "CREATE DATABASE glance;" 
 mysql -u root --password="avi123" -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'avi123';"
 mysql -u root --password="avi123" -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'avi123';"
 
+source /root/admin-openrc.sh
 openstack user create --domain default --password avi123 glance
 openstack role add --project service --user glance admin
 
@@ -78,44 +83,28 @@ su -s /bin/sh -c "glance-manage db_sync" glance
 service glance-registry restart
 service glance-api restart
 
+
 #add nova: api, compute and other nova components 
 mysql -u root --password="avi123" -e "CREATE DATABASE nova;" 
+mysql -u root --password="avi123" -e "CREATE DATABASE nova_api;" 
 mysql -u root --password="avi123" -e "GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'localhost' IDENTIFIED BY 'avi123';"
 mysql -u root --password="avi123" -e "GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY 'avi123';"
-
-mysql -u root --password="avi123" -e "CREATE DATABASE nova_api;" 
 mysql -u root --password="avi123" -e "GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY 'avi123';"
 mysql -u root --password="avi123" -e "GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY 'avi123';"
 
-
-mysql -u root --password="avi123" -e "CREATE DATABASE nova_cell0;" 
-mysql -u root --password="avi123" -e "GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'localhost' IDENTIFIED BY 'avi123';"
-mysql -u root --password="avi123" -e "GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'%' IDENTIFIED BY 'avi123';"
-
+source /root/admin-openrc.sh
 openstack user create --domain default --password avi123 nova
 openstack role add --project service --user nova admin
 openstack service create --name nova --description "OpenStack Compute" compute
-openstack endpoint create --region RegionOne compute public http://$my_ip:8774/v2.1
-openstack endpoint create --region RegionOne compute internal http://$my_ip:8774/v2.1
-openstack endpoint create --region RegionOne compute admin http://$my_ip:8774/v2.1
+openstack endpoint create --region RegionOne compute public http://$my_ip:8774/v2.1/%\(tenant_id\)s
+openstack endpoint create --region RegionOne compute internal http://$my_ip:8774/v2.1/%\(tenant_id\)s
+openstack endpoint create --region RegionOne compute admin http://$my_ip:8774/v2.1/%\(tenant_id\)s
 
-openstack user create --domain default --password avi123 placement
-openstack role add --project service --user placement admin
-openstack service create --name placement --description "Placement API" placement
-openstack endpoint create --region RegionOne placement public http://$my_ip:8778
-openstack endpoint create --region RegionOne placement internal http://$my_ip:8778
-openstack endpoint create --region RegionOne placement admin http://$my_ip:8778
-
-
-apt-get -y install nova-api nova-conductor nova-consoleauth \
-  nova-novncproxy nova-scheduler nova-placement-api python-novaclient
+apt-get -y install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler
 cp /root/files/nova.conf /etc/nova/
 sed -i s/MY_IP/$my_ip/g /etc/nova/nova.conf
 su -s /bin/sh -c "nova-manage api_db sync" nova
-su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova
-su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" nova
 su -s /bin/sh -c "nova-manage db sync" nova
-nova-manage cell_v2 list_cells
 
 service nova-api restart
 service nova-consoleauth restart
@@ -125,8 +114,6 @@ service nova-novncproxy restart
 #nova compute
 apt-get install -y nova-compute
 service nova-compute restart
-openstack hypervisor list
-su -s /bin/sh -c "nova-manage cell_v2 discover_hosts --verbose" nova
 
 # add neutron service
 mysql -u root --password="avi123" -e "CREATE DATABASE neutron;"
@@ -163,7 +150,6 @@ service nova-compute restart
 
 apt-get install -y openstack-dashboard
 cp /root/files/local_settings.py /etc/openstack-dashboard/local_settings.py
-chown www-data /var/lib/openstack-dashboard/secret_key
 service apache2 reload
 
 # heat
@@ -195,5 +181,5 @@ service heat-api restart
 service heat-api-cfn restart
 service heat-engine restart
 
-chown horizon /var/lib/openstack-dashboard/secret_key
+# to do: lbaas, lbaas-dashboard
 

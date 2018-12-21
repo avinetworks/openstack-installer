@@ -11,6 +11,12 @@ routerid=`openstack router show adminrouter | grep " id " | awk '{print $4;}'`
 extnetid=`openstack network show provider1 | grep " id " | awk '{print $4;}'`
 neutron router-gateway-set $routerid $extnetid
 
+# create router for data networks (BE) not connected to VIP networks (FE)
+openstack router create router2
+# set it to connect to the external network
+router2id=`openstack router show router2 | grep " id " | awk '{print $4;}'`
+neutron router-gateway-set $router2id $extnetid
+
 # create couple of networks in admin tenant
 # mgmt network
 neutron net-create mgmt --shared
@@ -31,7 +37,7 @@ neutron net-create data4 --shared
 neutron subnet-create data4 10.0.3.0/24 --name data4snw --dns-nameserver 10.10.0.100
 #connect router to it
 subnetid=`openstack subnet show data4snw | grep " id " | awk '{print $4;}'`
-neutron router-interface-add $routerid subnet=$subnetid
+neutron router-interface-add $router2id subnet=$subnetid
 
 # vip ipv6 network
 neutron net-create vip6 --shared
@@ -55,4 +61,4 @@ neutron subnet-create data6 \
     b100::/64
 #connect router to it
 subnetid=`neutron subnet-show data6snw -c 'id' --format 'value'`
-neutron router-interface-add $routerid subnet=$subnetid
+neutron router-interface-add $router2id subnet=$subnetid

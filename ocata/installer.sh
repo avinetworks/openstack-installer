@@ -1,6 +1,8 @@
 set -x
 set -e
 
+export LC_ALL=C
+
 cp /root/files/demo-openrc.sh /root/
 cp /root/files/admin-openrc.sh /root/
 source /root/admin-openrc.sh
@@ -193,5 +195,5 @@ service heat-api restart
 service heat-api-cfn restart
 service heat-engine restart
 
-# to do: lbaas, lbaas-dashboard
+chown horizon /var/lib/openstack-dashboard/secret_key
 

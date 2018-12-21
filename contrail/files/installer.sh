@@ -1,6 +1,7 @@
 set -e
 set -x
 
+export LC_ALL=C
 
 interface=eth0
 myip=`ifconfig $interface | grep "inet addr" | awk '{split($2, a, ":"); print a[2];}'`

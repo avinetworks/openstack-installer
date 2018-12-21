@@ -4,6 +4,8 @@ set -x
 # get IP of ens4
 # use it to populate pool start, end, gw, cidr
 interface=ens4
+# Run in subshell to avoid exiting this script
+(dhclient -r $interface; dhclient $interface)
 my_ip_pref=`ifconfig $interface | grep "inet addr" | awk '{split($2, a, ":"); split(a[2], b, "."); printf("%s.%s.%s.", b[1], b[2], b[3]);}'`
 
 # for floating IP and external connectivity

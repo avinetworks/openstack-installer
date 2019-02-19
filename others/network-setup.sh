@@ -109,7 +109,7 @@ neutron net-create ds1 --shared
 neutron subnet-create ds1 \
     --name ds1snw4 \
     --ip-version 4 \
-    --dns-nameserver 10.10.0.100
+    --dns-nameserver 10.10.0.100 \
     172.16.1.0/24
 subnetid=`openstack subnet show ds1snw4 | grep " id " | awk '{print $4;}'`
 neutron router-interface-add $routerid subnet=$subnetid
@@ -128,7 +128,7 @@ neutron net-create ds2 --shared
 neutron subnet-create ds2 \
     --name ds2snw4 \
     --ip-version 4 \
-    --dns-nameserver 10.10.0.100
+    --dns-nameserver 10.10.0.100 \
     172.16.2.0/24
 # subnetid=`openstack subnet show ds2snw4 | grep " id " | awk '{print $4;}'`
 # neutron router-interface-add $routerid subnet=$subnetid

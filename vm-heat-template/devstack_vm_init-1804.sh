@@ -40,7 +40,7 @@ aviuser   ALL=(ALL:ALL) NOPASSWD:ALL
 EOF
 
 
-# add eth1 auto up
+# Add ens4 for external routing
 cat << EOF >> /etc/systemd/network/10-netplan-ens4.network
 [Match]
 # If you know the MAC address otherwise match on name
@@ -56,7 +56,8 @@ UseRoutes=false
 UseMTU=true
 # Use following to add a less preferred default route or set
 # UseRoutes=False to avoid adding any default route from DHCP for this
-# interface
+# interface. Having two default routes for two interfaces is causing
+# issues with routing.
 # RouteMetric=200
 EOF
 

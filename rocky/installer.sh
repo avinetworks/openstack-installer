@@ -7,14 +7,14 @@ cp /root/files/demo-openrc.sh /root/
 cp /root/files/admin-openrc.sh /root/
 source /root/admin-openrc.sh
 
-apt-get -y update && apt-get -y upgrade
+export DEBIAN_FRONTEND=noninteractive
 add-apt-repository -y cloud-archive:rocky
+apt-get -y update && apt-get -y upgrade && apt-get -y dist-upgrade
 apt-get --yes install software-properties-common
-apt-get install -y python-openstackclient  python-pip git
+apt-get install -y python-openstackclient python-pip git
 apt-get install -y ssh-client
 
 # install mysql
-export DEBIAN_FRONTEND=noninteractive
 apt-get -y install mariadb-server python-pymysql && service mysql restart
 mysqladmin -u root password avi123
 cp /root/files/mysqld_openstack.cnf /etc/mysql/mariadb.conf.d/99-openstack.cnf

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export DEBIAN_FRONTEND=noninteractive
+apt-get -y update && apt-get -y upgrade
+
 adduser --gecos "" aviuser
 
 # add key

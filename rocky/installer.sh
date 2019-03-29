@@ -8,10 +8,10 @@ cp /root/files/admin-openrc.sh /root/
 source /root/admin-openrc.sh
 
 export DEBIAN_FRONTEND=noninteractive
-apt-get -y update && apt-get -y upgrade
 add-apt-repository -y cloud-archive:rocky
+apt-get -y update && apt-get -y upgrade && apt-get -y dist-upgrade
 apt-get --yes install software-properties-common
-apt-get install -y python-openstackclient  python-pip git
+apt-get install -y python-openstackclient python-pip git
 apt-get install -y ssh-client
 
 # install mysql

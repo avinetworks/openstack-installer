@@ -5,6 +5,8 @@ apt-get -y update && apt-get -y upgrade
 
 adduser --gecos "" aviuser
 
+# Don't allow ssh till all steps are done
+service ssh stop
 # add key
 mkdir -p /home/aviuser/.ssh
 chmod 700 /home/aviuser/.ssh
@@ -62,14 +64,14 @@ UseMTU=true
 # RouteMetric=200
 EOF
 
-ip link set ens3 down
-ip link set ens4 down
+# ip link set ens3 down
+#ip link set ens4 down
 
-ip link set ens3 up
-ip link set ens4 up
-sleep 5
+#ip link set ens3 up
+#ip link set ens4 up
+#sleep 5
 
-ifconfig ens4 >| /root/ens4
+#ifconfig ens4 >| /root/ens4
 
 # add hostname to /etc/hosts
 echo -n "127.0.0.1 " >> /etc/hosts

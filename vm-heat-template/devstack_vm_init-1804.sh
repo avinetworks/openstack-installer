@@ -5,6 +5,8 @@ apt-get -y update && apt-get -y upgrade
 
 adduser --gecos "" aviuser
 
+# Don't allow ssh till all steps are done
+service ssh stop
 # add key
 mkdir -p /home/aviuser/.ssh
 chmod 700 /home/aviuser/.ssh
@@ -29,7 +31,6 @@ chmod 700 /root/.ssh/authorized_keys
 # set root password to avi123
 sed -i s/PasswordAuthentication\ no/PasswordAuthentication\ yes/g /etc/ssh/sshd_config
 sed -i s/#PermitRootLogin\ prohibit-password/PermitRootLogin\ yes/g /etc/ssh/sshd_config
-service ssh restart
 echo -e 'avi123\navi123' | passwd root
 
 # some bug.. found solution online
@@ -63,9 +64,18 @@ UseMTU=true
 # RouteMetric=200
 EOF
 
-ip link set ens4 down
-ip link set ens4 up
+# ip link set ens3 down
+#ip link set ens4 down
+
+#ip link set ens3 up
+#ip link set ens4 up
+#sleep 5
+
+#ifconfig ens4 >| /root/ens4
 
 # add hostname to /etc/hosts
 echo -n "127.0.0.1 " >> /etc/hosts
 cat /etc/hostname >> /etc/hosts
+
+# service ssh restart
+reboot

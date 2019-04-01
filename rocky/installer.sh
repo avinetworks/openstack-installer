@@ -3,6 +3,17 @@ set -e
 
 export LC_ALL=C
 
+interface=ens4
+ifconfig  $interface >| /root/$interface
+ip=`cat /root/$interface | grep inet | grep -v inet6 | awk '{print $2}'`
+echo "Secondary IP is $ip"
+if [[ -z $ip ]];
+then
+    echo "Secondary interface IP not found; exiting"
+    cat /root/$interface
+    exit 1
+fi
+
 cp /root/files/demo-openrc.sh /root/
 cp /root/files/admin-openrc.sh /root/
 source /root/admin-openrc.sh

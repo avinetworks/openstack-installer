@@ -3,7 +3,7 @@ set -e
 interface="ens4"
 cidr="10.90.0.0/16"
 
-my_mac=`ifconfig $interface | grep "ether" | awk '{print $2;}'`
+my_mac=`cat /etc/$interface | grep "ether" | awk '{print $2;}'`
 if [ -z "$my_mac" ]; then
     echo "Can't find mac!"
     exit

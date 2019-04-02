@@ -1,9 +1,9 @@
 set -e
 set -x
 
+./set-roles.sh
 ./network-setup.sh
 cd /root/files/ && ./router-aap.sh && cd -
-./set-roles.sh
 ./upload-nginx-image.sh
 sleep 60
 ./create-se-flavor.sh

@@ -33,4 +33,35 @@ openstack server create --flavor m1.se \
 sleep 5
 
 openstack server list
-sleep 5
+
+# Wait for client
+status=`openstack server show client1 | grep status | awk '{print $4}'`
+count=0
+while [[ "$status" != "ACTIVE" ]]  &&  [[ $count -lt 24 ]];
+do
+    echo "Waiting for client to come up..."
+    sleep 5
+    (( count++ ))
+    status=`openstack server show client1 | grep status | awk '{print $4}'`
+done
+if [[ "$status" != "ACTIVE" ]];
+then
+        echo "Client VM didn't come up..."
+        exit 1
+fi
+
+# Wait for server
+status=`openstack server show server1 | grep status | awk '{print $4}'`
+count=0
+while [[ "$status" != "ACTIVE" ]]  &&  [[ $count -lt 24 ]];
+do
+    echo "Waiting for client to come up..."
+    sleep 5
+    (( count++ ))
+    status=`openstack server show server1 | grep status | awk '{print $4}'`
+done
+if [[ "$status" != "ACTIVE" ]];
+then
+        echo "Server VM didn't come up..."
+        exit 1
+fi

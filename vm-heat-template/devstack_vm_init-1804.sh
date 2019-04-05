@@ -1,7 +1,10 @@
 #!/bin/bash
 
+echo "Acquire::http::Proxy \"http://10.10.35.204:3142\";" | tee /etc/apt/apt.conf.d/00proxy
+apt-get update -q -y
+
 export DEBIAN_FRONTEND=noninteractive
-apt-get -y update && apt-get -y upgrade
+apt-get -y update && apt-get -y upgrade && apt-get -y dist-upgrade
 
 adduser --gecos "" aviuser
 

@@ -41,7 +41,8 @@ while [[ "$status" != "ACTIVE" ]]  &&  [[ $count -lt 24 ]];
 do
     echo "Waiting for client to come up..."
     sleep 5
-    (( count++ ))
+    #(( count++ ))
+    count=$((count+1))
     status=`openstack server show client1 | grep status | awk '{print $4}'`
 done
 if [[ "$status" != "ACTIVE" ]];
@@ -57,7 +58,8 @@ while [[ "$status" != "ACTIVE" ]]  &&  [[ $count -lt 24 ]];
 do
     echo "Waiting for client to come up..."
     sleep 5
-    (( count++ ))
+    #(( count++ ))
+    count=$((count+1))
     status=`openstack server show server1 | grep status | awk '{print $4}'`
 done
 if [[ "$status" != "ACTIVE" ]];

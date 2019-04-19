@@ -37,10 +37,10 @@ openstack server list
 # Wait for client
 status=`openstack server show client1 | grep status | awk '{print $4}'`
 count=0
-while [[ "$status" != "ACTIVE" ]]  &&  [[ $count -lt 24 ]];
+while [[ "$status" != "ACTIVE" ]]  &&  [[ $count -lt 60 ]];
 do
     echo "Waiting for client to come up..."
-    sleep 5
+    sleep 10
     #(( count++ ))
     count=$((count+1))
     status=`openstack server show client1 | grep status | awk '{print $4}'`
@@ -54,10 +54,10 @@ fi
 # Wait for server
 status=`openstack server show server1 | grep status | awk '{print $4}'`
 count=0
-while [[ "$status" != "ACTIVE" ]]  &&  [[ $count -lt 24 ]];
+while [[ "$status" != "ACTIVE" ]]  &&  [[ $count -lt 60 ]];
 do
     echo "Waiting for client to come up..."
-    sleep 5
+    sleep 10
     #(( count++ ))
     count=$((count+1))
     status=`openstack server show server1 | grep status | awk '{print $4}'`

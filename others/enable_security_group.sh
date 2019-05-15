@@ -29,3 +29,5 @@ service neutron-server restart
 service neutron-linuxbridge-agent restart
 service nova-api restart
 service nova-compute restart
+echo "Sleeping for 30s for servives to come up..."
+sleep 30

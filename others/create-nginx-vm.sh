@@ -9,12 +9,14 @@ export OS_PROJECT_NAME=demo
 # create client in vip ipv4 and vip6 network
 netid=`neutron net-show vip4 -c 'id' --format 'value'`
 net6id=`neutron net-show vip6 -c 'id' --format 'value'`
+net2id=`neutron net-show vip42 -c 'id' --format 'value'`
 openstack server create --flavor m1.se \
     --image trusty \
     --user-data ./cloud-init-client.sh \
     --config-drive True \
     --nic net-id=$netid,v4-fixed-ip=10.0.2.20 \
     --nic net-id=$net6id,v6-fixed-ip='a100::20' \
+    --nic net-id=$net2id,v4-fixed-ip=192.168.2.12 \
     client1
 
 sleep 5

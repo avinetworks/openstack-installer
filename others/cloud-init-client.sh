@@ -13,6 +13,7 @@ apt-get update
 # For trusty manually run dhclient
 # TODO: put the following in /etc/rc.local to run on reboot
 dhclient -6 eth1
+dhclient eth2
 
 sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config

@@ -21,6 +21,35 @@ openstack server create --flavor m1.se \
 
 sleep 5
 
+# Check for client VM in error state
+status=`openstack server show client1 | grep status | awk '{print $4}'`
+count=0
+while [[ "$status" == "ERROR" ]] && [[ $count -lt 3 ]];
+do
+    echo "Deleting the client vm in error state ..."
+    openstack server delete client1
+    s=`openstack server list | grep client1`
+    while [[ ! -z "$s" ]];
+    do
+        sleep 5
+        s=`openstack server list | grep client1`
+    done
+    echo "Client VM deleted"
+    sleep 5
+    openstack server create --flavor m1.se \
+        --image trusty \
+        --user-data ./cloud-init-client.sh \
+        --config-drive True \
+        --nic net-id=$netid,v4-fixed-ip=10.0.2.20 \
+        --nic net-id=$net6id,v6-fixed-ip='a100::20' \
+        --nic net-id=$net2id,v4-fixed-ip=192.168.2.12 \
+        client1
+    sleep 5
+    status=`openstack server show client1 | grep status | awk '{print $4}'`
+    count=$((count+1))
+done
+[[ "$status" == "ERROR" ]] && echo "Client VM in error state, exiting..." && exit 1
+
 # create server in data IPv4 and data IPv6 network
 netid=`neutron net-show data4 -c 'id' --format 'value'`
 net6id=`neutron net-show data6 -c 'id' --format 'value'`

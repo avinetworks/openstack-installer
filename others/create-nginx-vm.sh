@@ -21,34 +21,54 @@ openstack server create --flavor m1.se \
 
 sleep 5
 
-# Check for client VM in error state
-status=`openstack server show client1 | grep status | awk '{print $4}'`
+# Wait/Check for Client VM
 count=0
-while [[ "$status" == "ERROR" ]] && [[ $count -lt 3 ]];
+cnt=0
+while :
 do
-    echo "Deleting the client vm in error state ..."
-    openstack server delete client1
-    s=`openstack server list | grep client1`
-    while [[ ! -z "$s" ]];
-    do
-        sleep 5
-        s=`openstack server list | grep client1`
-    done
-    echo "Client VM deleted"
-    sleep 5
-    openstack server create --flavor m1.se \
-        --image trusty \
-        --user-data ./cloud-init-client.sh \
-        --config-drive True \
-        --nic net-id=$netid,v4-fixed-ip=10.0.2.20 \
-        --nic net-id=$net6id,v6-fixed-ip='a100::20' \
-        --nic net-id=$net2id,v4-fixed-ip=192.168.2.12 \
-        client1
-    sleep 5
     status=`openstack server show client1 | grep status | awk '{print $4}'`
-    count=$((count+1))
+    if [[ "$status" == "ACTIVE" ]];
+    then
+        echo "Client VM ACTIVE"
+        break
+    elif [[ "$status" == "ERROR" ]];
+    then
+        if [[ $count -lt 3 ]];
+        then
+            echo "Deleting the client vm in error state ..."
+            openstack server delete client1
+            s=`openstack server list | grep client1`
+            while [[ ! -z "$s" ]];
+            do
+                sleep 5
+                s=`openstack server list | grep client1`
+            done
+            echo "Client VM deleted"
+            sleep 5
+            openstack server create --flavor m1.se \
+                --image trusty \
+                --user-data ./cloud-init-client.sh \
+                --config-drive True \
+                --nic net-id=$netid,v4-fixed-ip=10.0.2.20 \
+                --nic net-id=$net6id,v6-fixed-ip='a100::20' \
+                --nic net-id=$net2id,v4-fixed-ip=192.168.2.12 \
+                client1
+            sleep 5
+            count=$((count+1))
+        else
+            echo "Exiting as Client VM in ERROR state"
+            exit 1
+        fi
+    elif [[ $cnt -lt 60 ]];
+    then
+        echo "Waiting for Client VM to be ACTIVE"
+        sleep 5
+        cnt=$((cnt+1))
+    else
+        echo "Exiting as Client VM didn't come up"
+        exit 1
+    fi
 done
-[[ "$status" == "ERROR" ]] && echo "Client VM in error state, exiting..." && exit 1
 
 # create server in data IPv4 and data IPv6 network
 netid=`neutron net-show data4 -c 'id' --format 'value'`
@@ -63,38 +83,52 @@ openstack server create --flavor m1.se \
 
 sleep 5
 
-openstack server list
-
-# Wait for client
-status=`openstack server show client1 | grep status | awk '{print $4}'`
+# Wait/Check for Server VM
 count=0
-while [[ "$status" != "ACTIVE" ]]  &&  [[ $count -lt 60 ]];
+cnt=0
+while :
 do
-    echo "Waiting for client to come up..."
-    sleep 10
-    #(( count++ ))
-    count=$((count+1))
-    status=`openstack server show client1 | grep status | awk '{print $4}'`
-done
-if [[ "$status" != "ACTIVE" ]];
-then
-        echo "Client VM didn't come up..."
-        exit 1
-fi
-
-# Wait for server
-status=`openstack server show server1 | grep status | awk '{print $4}'`
-count=0
-while [[ "$status" != "ACTIVE" ]]  &&  [[ $count -lt 60 ]];
-do
-    echo "Waiting for client to come up..."
-    sleep 10
-    #(( count++ ))
-    count=$((count+1))
     status=`openstack server show server1 | grep status | awk '{print $4}'`
-done
-if [[ "$status" != "ACTIVE" ]];
-then
-        echo "Server VM didn't come up..."
+    if [[ "$status" == "ACTIVE" ]];
+    then
+        echo "Server VM ACTIVE"
+        break
+    elif [[ "$status" == "ERROR" ]];
+    then
+        if [[ $count -lt 3 ]];
+        then
+            echo "Deleting the server vm in error state ..."
+            openstack server delete server1
+            s=`openstack server list | grep server1`
+            while [[ ! -z "$s" ]];
+            do
+                sleep 5
+                s=`openstack server list | grep server1`
+            done
+            echo "Server VM deleted"
+            sleep 5
+            openstack server create --flavor m1.se \
+                --image trusty \
+                --user-data ./cloud-init-server.sh \
+                --config-drive True \
+                --nic net-id=$netid,v4-fixed-ip=10.0.3.10 \
+                --nic net-id=$net6id,v6-fixed-ip='b100::10' \
+                server1
+            sleep 5
+            count=$((count+1))
+        else
+            echo "Exiting as Server VM in ERROR state"
+            exit 1
+        fi
+    elif [[ $cnt -lt 60 ]];
+    then
+        echo "Waiting for Server VM to be ACTIVE"
+        sleep 5
+        cnt=$((cnt+1))
+    else
+        echo "Exiting as Server VM didn't come up"
         exit 1
-fi
+    fi
+done
+
+openstack server list

@@ -22,8 +22,8 @@ openstack server create --flavor m1.se \
 sleep 5
 
 # Wait/Check for Client VM
-count=0
-cnt=0
+vm_retry_count=0
+sleep_count=0
 while :
 do
     status=`openstack server show client1 | grep status | awk '{print $4}'`
@@ -33,7 +33,7 @@ do
         break
     elif [[ "$status" == "ERROR" ]];
     then
-        if [[ $count -lt 3 ]];
+        if [[ $vm_retry_count -lt 3 ]];
         then
             echo "Deleting the client vm in error state ..."
             openstack server delete client1
@@ -54,16 +54,17 @@ do
                 --nic net-id=$net2id,v4-fixed-ip=192.168.2.12 \
                 client1
             sleep 5
-            count=$((count+1))
+            vm_retry_count=$((vm_retry_count+1))
+            sleep_count=0
         else
             echo "Exiting as Client VM in ERROR state"
             exit 1
         fi
-    elif [[ $cnt -lt 60 ]];
+    elif [[ $sleep_count -lt 120 ]];
     then
         echo "Waiting for Client VM to be ACTIVE"
         sleep 5
-        cnt=$((cnt+1))
+        sleep_count=$((sleep_count+1))
     else
         echo "Exiting as Client VM didn't come up"
         exit 1
@@ -84,8 +85,8 @@ openstack server create --flavor m1.se \
 sleep 5
 
 # Wait/Check for Server VM
-count=0
-cnt=0
+vm_retry_count=0
+sleep_count=0
 while :
 do
     status=`openstack server show server1 | grep status | awk '{print $4}'`
@@ -95,7 +96,7 @@ do
         break
     elif [[ "$status" == "ERROR" ]];
     then
-        if [[ $count -lt 3 ]];
+        if [[ $vm_retry_count -lt 3 ]];
         then
             echo "Deleting the server vm in error state ..."
             openstack server delete server1
@@ -115,16 +116,17 @@ do
                 --nic net-id=$net6id,v6-fixed-ip='b100::10' \
                 server1
             sleep 5
-            count=$((count+1))
+            vm_retry_count=$((vm_retry_count+1))
+            sleep_count=0
         else
             echo "Exiting as Server VM in ERROR state"
             exit 1
         fi
-    elif [[ $cnt -lt 60 ]];
+    elif [[ $sleep_count -lt 120 ]];
     then
         echo "Waiting for Server VM to be ACTIVE"
         sleep 5
-        cnt=$((cnt+1))
+        sleep_count=$((sleep_count+1))
     else
         echo "Exiting as Server VM didn't come up"
         exit 1

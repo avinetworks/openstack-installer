@@ -47,7 +47,7 @@ ansible-playbook -i inventory/ -e orchestrator=openstack playbooks/configure_ins
 ansible-playbook -i inventory/ playbooks/install_openstack.yml
 ansible-playbook -i inventory/ -e orchestrator=openstack playbooks/install_contrail.yml
 
-#Allow to create kvm user to create compute host
+#Kvm user to create compute host
 chmod 666 /dev/kvm
 groupadd kvm
 usermod -a -G kvm root

@@ -4,6 +4,16 @@ Scripts to install Contrail 5.0.2 on openstack. This is done using Kolla Ansible
 
 #Pre-requisite
 
+Ubuntu 16.04.6 with kernal version 4.4.0-131-generic
+
+Should support Virtualization
+
+```python
+Host Machine Resoures:
+Harddisk  = 350GB
+RAM       = 64GB
+CPU       = 16
+```
 Need to export the following variables
 
 ```python

@@ -2,7 +2,7 @@
 
 Scripts to install Contrail 5.0.2 on openstack. This is done using Kolla Ansible.
 
-#Pre-requisite
+# Pre-requisite
 
 Ubuntu 16.04.6 with kernal version 4.4.0-131-generic
 
@@ -14,7 +14,7 @@ Harddisk  = 350GB
 RAM       = 64GB
 CPU       = 16
 ```
-Need to export the following variables
+Need to the following variables
 
 ```python
 registry_username
@@ -23,17 +23,17 @@ registry_password
 'Password for the registry to pull images'
 keystone_password
 'keystone password for openstack'
-export ssh_password
+ssh_password
 'Password of host for SSH where we deploy contrail'
-export gateway_ip
+gateway_ip
 'Gateway IP'
-export start_pool
+start_pool
 'Starting IP of the pool for compue host'
-export end_pool
+end_pool
 'End IP of the pool for compue host'
-export external_network
+external_network
 'Network of the Host where we deploy the contrail'
-export ipam_public_net
+ipam_public_net
 'Network of the compute host'
 ```
 

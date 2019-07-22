@@ -8,6 +8,8 @@ Ubuntu 16.04.6 with kernal version 4.4.0-131-generic
 
 Should support Virtualization
 
+Make sure you are in root user to reslove from permission issues.
+
 ```python
 Host Machine Resoures:
 Harddisk  = 350GB

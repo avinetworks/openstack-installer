@@ -1,0 +1,50 @@
+provider_config:
+  bms:
+    ssh_pwd: ssh_password
+    ssh_user: root
+    ntpserver: 10.10.0.100
+    domainsuffix: avi.local
+instances:
+  bms1:
+    provider: bms
+    ip: interface_ip
+    roles:
+      config_database:
+      config:
+      control:
+      analytics_database:
+      analytics:
+      webui:
+      vrouter:
+      openstack_control:
+      openstack_network:
+      openstack_storage:
+      openstack_monitoring:
+      openstack_compute:
+      openstack:
+global_configuration:
+  CONTAINER_REGISTRY: hub.juniper.net/contrail
+  CONTAINER_REGISTRY_USERNAME: registry_username
+  CONTAINER_REGISTRY_PASSWORD: registry_password
+contrail_configuration:
+  CONTRAIL_CONTAINER_TAG: 5.0.2-0.360-queens
+  CLOUD_ORCHESTRATOR: openstack
+  OPENSTACK_VERSION: queens
+  VROUTER_GATEWAY: gateway_ip
+  PHYSICAL_INTERFACE: physical_interface_name
+  AAA_MODE: no-auth
+  WEBUI_INSECURE_ACCESS: true
+  CONTROLLER_NODES: interface_ip
+  CONTROL_NODES: interface_ip
+  WEBUI_NODES: interface_ip
+  ENCAP_PRIORITY: VXLAN,MPLSoUDP,MPLSoGRE
+  CONFIG_DATABASE_NODEMGR__DEFAULTS__minimum_diskGB: 256
+  DATABASE_NODEMGR__DEFAULTS__minimum_diskGB: 256
+kolla_config:
+  kolla_globals:
+    enable_haproxy: "no"
+    enable_ironic: "no"
+    enable_swift: "no"
+    contrail_api_interface_address: interface_ip
+    kolla_passwords:
+      keystone_admin_password: keystone_password

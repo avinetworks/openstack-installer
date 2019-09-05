@@ -48,6 +48,7 @@ mysql -u root --password="avi123" -e "GRANT ALL PRIVILEGES ON keystone.* TO 'key
 # echo "manual" > /etc/init/keystone.override
 apt-get -y install keystone apache2 libapache2-mod-wsgi memcached python-memcache
 cp /root/files/keystone.conf /etc/keystone/
+cp /root/files/keystone.policy.yaml /etc/keystone/
 su -s /bin/sh -c "keystone-manage db_sync" keystone
 keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
 keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
@@ -127,6 +128,7 @@ openstack endpoint create --region RegionOne placement admin http://$my_ip:8778
 apt-get -y install nova-api nova-conductor nova-consoleauth \
   nova-novncproxy nova-scheduler nova-placement-api python-novaclient
 cp /root/files/nova.conf /etc/nova/
+cp /root/files/nova.policy.yaml /etc/nova/
 sed -i s/MY_IP/$my_ip/g /etc/nova/nova.conf
 su -s /bin/sh -c "nova-manage api_db sync" nova
 su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova
@@ -159,6 +161,7 @@ openstack endpoint create --region RegionOne network internal http://$my_ip:9696
 openstack endpoint create --region RegionOne network admin http://$my_ip:9696
 apt-get -y install neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-dhcp-agent neutron-metadata-agent neutron-l3-agent
 cp /root/files/neutron.conf /etc/neutron/
+cp /root/files/neutron.policy.json /etc/neutron/
 cp /root/files/ml2_conf.ini /etc/neutron/plugins/ml2/
 cp /root/files/linuxbridge_agent.ini /etc/neutron/plugins/ml2/
 sed -i s/OVERLAY_INTERFACE_IP_ADDRESS/$my_ip/g /etc/neutron/plugins/ml2/linuxbridge_agent.ini

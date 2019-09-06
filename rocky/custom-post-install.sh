@@ -21,3 +21,6 @@ neutron subnet-create --name provider1-v4 --ip-version 4 \
    --gateway $GW --dns-nameserver 8.8.4.4 provider1 \
    $CIDR 
 
+# Fix the theme: really fancy stuff
+sed -i '/^DEFAULT_THEME/ s/ubuntu/default/g' /usr/share/openstack-dashboard/openstack_dashboard/settings.py
+apache2ctl restart

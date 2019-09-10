@@ -19,6 +19,9 @@ do
     fi
 done
 
+# Sleeping for nginx to come up
+sleep 10
+
 set -e
 
 source /root/admin-openrc.sh

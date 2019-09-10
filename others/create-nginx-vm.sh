@@ -21,6 +21,8 @@ openstack server create --flavor m1.se \
 
 sleep 5
 
+set +e
+
 # Wait/Check for Client VM
 vm_retry_count=0
 sleep_count=0
@@ -71,6 +73,8 @@ do
     fi
 done
 
+set -e
+
 # create server in data IPv4 and data IPv6 network
 netid=`neutron net-show data4 -c 'id' --format 'value'`
 net6id=`neutron net-show data6 -c 'id' --format 'value'`
@@ -83,6 +87,8 @@ openstack server create --flavor m1.se \
     server1
 
 sleep 5
+
+set +e
 
 # Wait/Check for Server VM
 vm_retry_count=0

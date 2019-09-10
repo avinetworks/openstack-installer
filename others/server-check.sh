@@ -7,7 +7,7 @@ source /root/demo-openrc.sh
 sleep_count=0
 while [[ $sleep_count -lt 60 ]];
 do
-    server_cloud_init_status=`openstack console log show server1 | grep Cloud-init | grep 'finished at'`
+    server_cloud_init_status=`openstack console log show --lines 10 server1 | grep Cloud-init | grep 'finished at'`
     if [[ ! -z "$server_cloud_init_status" ]];
     then
         echo "Cloud-Init finished"

@@ -1,7 +1,28 @@
 #!/usr/bin/env bash
 
-set -e
 set -x
+
+source /root/demo-openrc.sh
+
+sleep_count=0
+while [[ $sleep_count -lt 60 ]];
+do
+    server_cloud_init_status=`openstack console log show --lines 10 server1 | grep Cloud-init | grep 'finished at'`
+    if [[ ! -z "$server_cloud_init_status" ]];
+    then
+        echo "Cloud-Init finished"
+        break
+    else
+        echo "Cloud-Init still not finished"
+        sleep_count=$((sleep_count+1))
+        sleep 5
+    fi
+done
+
+# Sleeping for nginx to come up
+sleep 10
+
+set -e
 
 source /root/admin-openrc.sh
 

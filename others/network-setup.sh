@@ -141,3 +141,27 @@ neutron subnet-create ds2 \
     c200::/64
 # subnetid=`neutron subnet-show ds2snw6 -c 'id' --format 'value'`
 # neutron router-interface-add $routerid subnet=$subnetid
+
+source /root/files/admin-openrc.sh
+tid=`openstack project show avilbaas -c 'id' -f 'value'`
+
+# create a router in demo tenant
+source /root/files/demo-openrc.sh
+
+# create router
+openstack router create demorouter
+# set it to connect to the external network
+routerid=`openstack router show demorouter -c 'id' -f 'value'`
+extnetid=`openstack network show provider1 -c 'id' -f 'value'`
+neutron router-gateway-set $routerid $extnetid
+
+# demo tenant vip ipv4 network
+neutron net-create demo-vip4
+neutron subnet-create demo-vip4 10.12.2.0/24 --name demo-vip4snw --dns-nameserver 10.10.0.100
+#connect router to it
+subnetid=`openstack subnet show demo-vip4snw -c 'id' -f 'value'`
+neutron router-interface-add $routerid subnet=$subnetid
+
+# share with avilbaas tenant
+netid=`openstack network show demo-vip4 -c 'id' -f 'value'`
+neutron rbac-create --target-tenant $tid --action access_as_shared --type network $netid

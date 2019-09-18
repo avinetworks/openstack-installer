@@ -16,6 +16,7 @@ fi
 
 cp /root/files/demo-openrc.sh /root/
 cp /root/files/admin-openrc.sh /root/
+cp /root/files/aviuser-openrc.sh /root/
 source /root/admin-openrc.sh
 
 export DEBIAN_FRONTEND=noninteractive

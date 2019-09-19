@@ -10,6 +10,7 @@ export OS_PROJECT_NAME=demo
 netid=`neutron net-show vip4 -c 'id' --format 'value'`
 net6id=`neutron net-show vip6 -c 'id' --format 'value'`
 net2id=`neutron net-show vip42 -c 'id' --format 'value'`
+net3id=`neutron net-show demo-vip4 -c 'id' --format 'value'`
 openstack server create --flavor m1.se \
     --image trusty \
     --user-data ./cloud-init-client.sh \
@@ -17,6 +18,7 @@ openstack server create --flavor m1.se \
     --nic net-id=$netid,v4-fixed-ip=10.0.2.20 \
     --nic net-id=$net6id,v6-fixed-ip='a100::20' \
     --nic net-id=$net2id,v4-fixed-ip=192.168.2.12 \
+    --nic net-id=$net3id,v4-fixed-ip=10.12.2.20 \
     client1
 
 sleep 5
@@ -54,6 +56,7 @@ do
                 --nic net-id=$netid,v4-fixed-ip=10.0.2.20 \
                 --nic net-id=$net6id,v6-fixed-ip='a100::20' \
                 --nic net-id=$net2id,v4-fixed-ip=192.168.2.12 \
+	        --nic net-id=$net3id,v4-fixed-ip=10.12.2.20 \
                 client1
             sleep 5
             vm_retry_count=$((vm_retry_count+1))

@@ -8,6 +8,8 @@ Ubuntu 16.04.6 with kernal version 4.4.0-131-generic
 
 Should support Virtualization
 
+Machine should have only one interface
+
 Make sure you are in root user to reslove from permission issues.
 
 ```python
@@ -16,7 +18,7 @@ Harddisk  = 350GB
 RAM       = 64GB
 CPU       = 16
 ```
-Need to the following variables
+Need to the following variables to be exported
 
 ```python
 registry_username

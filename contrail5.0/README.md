@@ -18,7 +18,7 @@ Harddisk  = 350GB
 RAM       = 64GB
 CPU       = 16
 ```
-Need to the following variables to be exported
+Need  the following variables to be exported
 
 ```python
 registry_username

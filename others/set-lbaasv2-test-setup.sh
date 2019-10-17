@@ -9,7 +9,10 @@ sleep 60
 ./create-se-flavor.sh
 ./set-securitygroup.sh
 ./create-nginx-vm.sh
-./cert1.sh
-./cert2.sh
+version=$(nova-manage --version)
+if [ ${version} != 19.0.1 ]; then
+    ./cert1.sh
+    ./cert2.sh
+fi
 sleep 10
 ./set-clientvm-fip.sh

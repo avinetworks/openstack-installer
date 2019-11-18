@@ -39,6 +39,29 @@ neutron subnet-create data4 10.0.3.0/24 --name data4snw --dns-nameserver 10.10.0
 subnetid=`openstack subnet show data4snw | grep " id " | awk '{print $4;}'`
 neutron router-interface-add $router2id subnet=$subnetid
 
+# network cidr 10.0.4.0/24 already used in testsuite test_os_cc_disrupt
+
+# vip ipv4 network
+neutron net-create vip43 --shared
+neutron subnet-create vip43 10.0.5.0/24 --name vip43snw --dns-nameserver 10.10.0.100
+#connect router to it
+subnetid=`openstack subnet show vip43snw | grep " id " | awk '{print $4;}'`
+neutron router-interface-add $routerid subnet=$subnetid
+
+# vip ipv4 network
+neutron net-create vip44 --shared
+neutron subnet-create vip44 10.0.6.0/24 --name vip44snw --dns-nameserver 10.10.0.100
+#connect router to it
+subnetid=`openstack subnet show vip44snw | grep " id " | awk '{print $4;}'`
+neutron router-interface-add $routerid subnet=$subnetid
+
+# vip ipv4 network
+neutron net-create vip45 --shared
+neutron subnet-create vip45 10.0.7.0/24 --name vip45snw --dns-nameserver 10.10.0.100
+#connect router to it
+subnetid=`openstack subnet show vip45snw | grep " id " | awk '{print $4;}'`
+neutron router-interface-add $routerid subnet=$subnetid
+
 # vip ipv6 network
 neutron net-create vip6 --shared
 neutron subnet-create vip6 \

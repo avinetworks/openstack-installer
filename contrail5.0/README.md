@@ -1,43 +1,38 @@
-# Contrail5.0 On OpenStack
+# Deploying Contrail 5.x/19.x All-In-One On OpenStack
 
-Scripts to install Contrail 5.0.2 on openstack. This is done using Kolla Ansible.
+`openstack.sh` script brings up All-In-One Contrail 5.x/19.x in a VM/BM node.
+The underlying orchestrator is OpenStack Kolla Ansible and Contrail Ansible Deployer.
+This script uses single interface for management, control and data networks.
 
-# Pre-requisite
+#### Steps
 
-Ubuntu 16.04.6 with kernal version 4.4.0-131-generic
-
-Should support Virtualization
-
-Machine should have only one interface
-
-Make sure you are in root user to reslove from permission issues.
-
-```python
-Host Machine Resoures:
-Harddisk  = 350GB
-RAM       = 64GB
-CPU       = 16
-```
-Need  the following variables to be exported
-
+1. Create (or check) a flavor with RAM, CPU and Disk size as required by Contrail 19.x/5.x. Check the Contrail requirements: https://www.juniper.net/documentation/en_US/contrail19/topics/task/installation/hardware-reqs-vnc.html
+2. Make sure you have required Ubuntu/CentOS image.
+3. Bring up VM/BM with the flavor, required image, and an interface from desired network. Make sure the network has free IP addresses you can use to create a public network in the AIO OpenStack.
+4. Make sure you have the exact kernel version as mentioned in requirements guide. Otherwise upgrade/downgrade the kernel version.
+5. Install ansible and docker-ce of required versions, check the Contrail hardware/software requirements guide.
+6. Define following environment variables:
 ```python
 registry_username
-'Username for the registry to pull images'
+'Username for the Contrail Docker registry to pull images'
 registry_password
-'Password for the registry to pull images'
+'Password for the Contrail Docker registry to pull images'
 keystone_password
 'keystone password for openstack'
 ssh_password
 'Password of host for SSH where we deploy contrail'
 gateway_ip
-'Gateway IP'
+'Gateway IP if the underlying network for creating Public network in AIO setup'
 start_pool
-'Starting IP of the pool for compue host'
+'Starting IP of the pool for Public Network'
 end_pool
-'End IP of the pool for compue host'
+'End IP of the pool for for Public Network'
 external_network
-'Network of the Host where we deploy the contrail'
+'CIDR of network of the VM/BM server where we deploy the contrail'
 ipam_public_net
-'Network of the compute host'
+'CIDR of public network to be create on AIO setup'
 ```
-
+7. Change `CONTRAIL_CONTAINER_TAG` in `instances.yaml` to required Container tag. e.g `5.0.2-0.360-queens` or `1909.30-rocky`
+8. Change `openstack.sh` and update line `git clone -b R5.0 https://github.com/Juniper/contrail-ansible-deployer.git` if you want different version of Contrail Deployer. e.g. `git clone -b R1909 https://github.com/Juniper/contrail-ansible-deployer.git`
+9. Run `openstack.sh` script.
+10. Make sure VGW interface is created. To test, deploy a VM on AIO public net and check it.

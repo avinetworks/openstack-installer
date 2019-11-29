@@ -6,7 +6,7 @@ This script uses single interface for management, control and data networks.
 
 #### Steps
 
-1. Create (or check) a flavour with required RAM, CPU and disk as required by Contrail 19.x/5.x. Check the Contrail requirements: https://www.juniper.net/documentation/en_US/contrail19/topics/task/installation/hardware-reqs-vnc.html
+1. Create (or check) a flavor with RAM, CPU and Disk size as required by Contrail 19.x/5.x. Check the Contrail requirements: https://www.juniper.net/documentation/en_US/contrail19/topics/task/installation/hardware-reqs-vnc.html
 2. Make sure you have required Ubuntu/CentOS image.
 3. Bring up VM/BM with the flavor, required image, and an interface from desired network. Make sure the network has free IP addresses you can use to create a public network in the AIO OpenStack.
 4. Make sure you have the exact kernel version as mentioned in requirements guide. Otherwise upgrade/downgrade the kernel version.
@@ -32,5 +32,7 @@ external_network
 ipam_public_net
 'CIDR of public network to be create on AIO setup'
 ```
-7. Run `openstack.sh` script.
-8. Make sure VGW interface is created. Deploy a VM on public net and test it.
+7. Change `CONTRAIL_CONTAINER_TAG` in `instances.yaml` to required Container tag. e.g `5.0.2-0.360-queens` or `1909.30-rocky`
+8. Change `openstack.sh` and update line `git clone -b R5.0 https://github.com/Juniper/contrail-ansible-deployer.git` if you want different version of Contrail Deployer. e.g. `git clone -b R1909 https://github.com/Juniper/contrail-ansible-deployer.git`
+9. Run `openstack.sh` script.
+10. Make sure VGW interface is created. To test, deploy a VM on AIO public net and check it.

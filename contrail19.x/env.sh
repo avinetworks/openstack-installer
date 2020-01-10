@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+export IP="10.90.207.41"
+export INTER="ens3"
+export registry_username=<username>
+export registry_password=<password>
+export contrail_container_tag=1909.30-rocky
+export openstack_version=rocky
+export keystone_password=avi123
+export ssh_password=avi123
+export gateway_ip=10.90.207.1
+export start_pool=10.90.207.129
+export end_pool=10.90.207.158
+export external_network=10.90.207.0/24
+export ipam_public_net=10.90.207.128/27
+export VROUTER_AGENT__GATEWAYDASH0__interface=vgw1
+export VROUTER_AGENT__GATEWAYDASH0__ip_block=10.90.207.128/27
+export VROUTER_AGENT__GATEWAYDASH0__routing_instance=default-domain:admin:public:public
+export VROUTER_AGENT__GATEWAYDASH0__routes=0.0.0.0/0

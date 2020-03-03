@@ -23,7 +23,7 @@ sed -i "s/MY_IP/$myip/g" testbed.py
 sed -i "s/DATA_IP/$dataip/g" testbed.py
 sed -i "s/DATA_GW/$GW/g" testbed.py
 cp testbed.py /opt/contrail/utils/fabfile/testbeds/
-cd /opt/contrail/utils/ && fab install_pkg_all:$CONTRAIL_PKG_LOC
+cd /opt/contrail/utils/ && fab install_pkg_all:$CONTRAIL_PKG_LOC && cd -
 cd /opt/contrail/utils/ && fab install_contrail && cd -
 
 # this one reboots the VM; so no use writing any commands after this one

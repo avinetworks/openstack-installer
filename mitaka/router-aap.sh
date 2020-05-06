@@ -10,10 +10,11 @@ if [ -z "$my_mac" ]; then
 fi
 
 # Resolve openstack-controller
-sed -i "s/nameserver 10.10.0.100\n//g" /etc/resolv.conf
-echo "nameserver 10.10.0.100" >> /etc/resolv.conf
-sed -i "s/search avi.local\n//g" /etc/resolv.conf
-echo "search avi.local" >> /etc/resolv.conf
+#sed -i "s/nameserver 10.10.0.100\n//g" /etc/resolv.conf
+#echo "nameserver 10.10.0.100" >> /etc/resolv.conf
+#sed -i "s/search avi.local\n//g" /etc/resolv.conf
+#echo "search avi.local" >> /etc/resolv.conf
+echo "10.50.62.22     openstack-controller.avi.local" >> /etc/hosts
 
 # figure out the port-id from lab credentials
 source ./lab_openrc.sh

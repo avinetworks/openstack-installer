@@ -13,8 +13,7 @@ source /root/admin-openrc.sh
 neutron net-create --shared --router:external --provider:physical_network provider --provider:network_type flat provider1
 neutron subnet-create --name provider1-v4 --ip-version 4 \
    --allocation-pool start=$POOL_START,end=$POOL_END \
-   --gateway $GW --dns-nameserver 8.8.4.4 provider1 \
-   $CIDR 
+   --gateway $GW provider1 $CIDR
 
 # Fix the theme: really fancy stuff
 sed -i '/^DEFAULT_THEME/ s/ubuntu/default/g' /usr/share/openstack-dashboard/openstack_dashboard/settings.py

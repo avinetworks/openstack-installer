@@ -18,6 +18,7 @@ apt-get install -y docker.io
 apt-get install -y python-pip
 
 export LC_ALL=C
+pip install --upgrade pip
 pip install ansible==2.7.10
 pip install requests
 pip install zipp==0.4.0
@@ -41,7 +42,7 @@ cd contrail
 git clone -b R1909 https://github.com/Juniper/contrail-ansible-deployer.git
 
 cp ../instances.yaml contrail-ansible-deployer/config/instances.yaml
-cp contrail19.py contrail-ansible-deployer
+cp ../contrail19.py contrail-ansible-deployer
 echo $(pwd)
 cd contrail-ansible-deployer
 echo $(pwd)
@@ -54,6 +55,10 @@ chmod 666 /dev/kvm
 groupadd kvm
 usermod -a -G kvm root
 chown root:kvm /dev/kvm
+
+#wait till contrail UI comes up
+echo "Wating for few minutes for contrail UI to come up"
+sleep 3m
 
 #Creation of routing using no SDN using contrail configuration.
 python contrail19.py --network ${ipam_public_net} --gateway ${gateway_ip} --contrail ${IP}

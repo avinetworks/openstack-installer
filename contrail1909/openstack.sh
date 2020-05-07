@@ -18,11 +18,11 @@ apt-get install -y docker.io
 apt-get install -y python-pip
 
 export LC_ALL=C
+pip install --upgrade pip
 pip install ansible==2.7.10
 pip install requests
 pip install zipp==0.4.0
 pip install configparser==3.5.2
-pip install --upgrade pip
 
 # create instance.yaml file
 IP="$(hostname -I | awk '{print $1}')"

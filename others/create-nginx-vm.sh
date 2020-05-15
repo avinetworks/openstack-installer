@@ -12,7 +12,7 @@ net6id=`neutron net-show vip6 -c 'id' --format 'value'`
 net2id=`neutron net-show vip42 -c 'id' --format 'value'`
 net3id=`neutron net-show demo-vip4 -c 'id' --format 'value'`
 openstack server create --flavor m1.se \
-    --image trusty \
+    --image ubuntu1604 \
     --user-data ./cloud-init-client.sh \
     --config-drive True \
     --nic net-id=$netid,v4-fixed-ip=10.0.2.20 \
@@ -82,7 +82,7 @@ set -e
 netid=`neutron net-show data4 -c 'id' --format 'value'`
 net6id=`neutron net-show data6 -c 'id' --format 'value'`
 openstack server create --flavor m1.se \
-    --image trusty \
+    --image ubuntu1604 \
     --user-data ./cloud-init-server.sh \
     --config-drive True \
     --nic net-id=$netid,v4-fixed-ip=10.0.3.10 \

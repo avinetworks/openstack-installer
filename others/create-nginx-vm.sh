@@ -11,7 +11,7 @@ netid=`neutron net-show vip4 -c 'id' --format 'value'`
 net6id=`neutron net-show vip6 -c 'id' --format 'value'`
 net2id=`neutron net-show vip42 -c 'id' --format 'value'`
 net3id=`neutron net-show demo-vip4 -c 'id' --format 'value'`
-openstack server create --flavor m1.se \
+openstack server create --flavor m1.vm \
     --image ubuntu1604 \
     --user-data ./cloud-init-client.sh \
     --config-drive True \
@@ -49,7 +49,7 @@ do
             done
             echo "Client VM deleted"
             sleep 5
-            openstack server create --flavor m1.se \
+            openstack server create --flavor m1.vm \
                 --image trusty \
                 --user-data ./cloud-init-client.sh \
                 --config-drive True \
@@ -81,7 +81,7 @@ set -e
 # create server in data IPv4 and data IPv6 network
 netid=`neutron net-show data4 -c 'id' --format 'value'`
 net6id=`neutron net-show data6 -c 'id' --format 'value'`
-openstack server create --flavor m1.se \
+openstack server create --flavor m1.vm \
     --image ubuntu1604 \
     --user-data ./cloud-init-server.sh \
     --config-drive True \
@@ -117,7 +117,7 @@ do
             done
             echo "Server VM deleted"
             sleep 5
-            openstack server create --flavor m1.se \
+            openstack server create --flavor m1.vm \
                 --image trusty \
                 --user-data ./cloud-init-server.sh \
                 --config-drive True \

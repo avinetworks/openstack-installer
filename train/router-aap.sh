@@ -1,7 +1,8 @@
 set -x
 set -e
 interface="ens4"
-cidr="10.90.0.0/16"
+ip_pref=`cat /root/$interface | grep "inet" | grep -v "inet6" | awk '{split($2, b, "."); printf("%s.%s.", b[1], b[2]);}'`
+cidr=${ip_pref}0.0/16
 
 my_mac=`cat /root/$interface | grep "ether" | awk '{print $2;}'`
 if [ -z "$my_mac" ]; then

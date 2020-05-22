@@ -1,7 +1,8 @@
 set -x
 set -e
 interface="eth1"
-cidr="10.90.0.0/16"
+ip_pref=`cat /root/$interface | grep "inet" | grep -v "inet6" | awk '{split($2, b, "."); printf("%s.%s.", b[1], b[2]);}'`
+cidr=${ip_pref}0.0/16
 
 my_mac=`ifconfig $interface | grep "HWaddr" | awk '{print $5;}'`
 if [ -z "$my_mac" ]; then

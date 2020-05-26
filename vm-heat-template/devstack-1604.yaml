@@ -1,0 +1,38 @@
+heat_template_version: 2014-10-16
+description:
+parameters:
+  vm_name:
+    type: string
+  az:
+    type: string
+    default: nova
+  net2:
+    type: string
+  net1:
+    type: string
+    default: avimgmt
+  flavor:
+    type: string
+    default: m1.xlarge
+  image:
+    type: string
+    default: ubuntu-16.04
+
+resources:
+  devstack_vm:
+    type: OS::Nova::Server
+    properties:
+      name: { get_param: vm_name }
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      networks:
+        - network: { get_param: net1 }
+        - network: { get_param: net2 }
+      config_drive: True
+      availability_zone: { get_param: az }
+      user_data: { get_file: devstack_vm_init-1604.sh }
+      user_data_format: RAW
+
+outputs:
+  dev_address:
+    value: { get_attr: [devstack_vm, networks, { get_param: net1 }, 0] }

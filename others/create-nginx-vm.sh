@@ -15,6 +15,7 @@ openstack server create --flavor m1.vm \
     --image ubuntu1604 \
     --user-data ./cloud-init-client.sh \
     --config-drive True \
+    --security-group allow-all \
     --nic net-id=$netid,v4-fixed-ip=10.0.2.20 \
     --nic net-id=$net6id,v6-fixed-ip='a100::20' \
     --nic net-id=$net2id,v4-fixed-ip=192.168.2.12 \
@@ -53,6 +54,7 @@ do
                 --image trusty \
                 --user-data ./cloud-init-client.sh \
                 --config-drive True \
+                --security-group allow-all \
                 --nic net-id=$netid,v4-fixed-ip=10.0.2.20 \
                 --nic net-id=$net6id,v6-fixed-ip='a100::20' \
                 --nic net-id=$net2id,v4-fixed-ip=192.168.2.12 \
@@ -85,6 +87,7 @@ openstack server create --flavor m1.vm \
     --image ubuntu1604 \
     --user-data ./cloud-init-server.sh \
     --config-drive True \
+    --security-group allow-all \
     --nic net-id=$netid,v4-fixed-ip=10.0.3.10 \
     --nic net-id=$net6id,v6-fixed-ip='b100::10' \
     server1
@@ -121,6 +124,7 @@ do
                 --image trusty \
                 --user-data ./cloud-init-server.sh \
                 --config-drive True \
+                --security-group allow-all \
                 --nic net-id=$netid,v4-fixed-ip=10.0.3.10 \
                 --nic net-id=$net6id,v6-fixed-ip='b100::10' \
                 server1

@@ -100,6 +100,8 @@
     "update_port:binding:profile": "rule:admin_only",
     "update_port:mac_learning_enabled": "rule:context_is_advsvc or rule:admin_or_network_owner",
     "update_port:allowed_address_pairs": "rule:admin_or_network_owner or rule:aviadmin_role ",
+    "update_port:allowed_address_pairs:ip_address": "rule:admin_or_network_owner or rule:aviadmin_role ",
+    "update_port:allowed_address_pairs:mac_address": "rule:admin_or_network_owner or rule:aviadmin_role ",
     "update_port:data_plane_status": "rule:admin_or_data_plane_int",
     "delete_port": "rule:context_is_advsvc or rule:admin_owner_or_network_owner",
 

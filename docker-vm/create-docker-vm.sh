@@ -37,9 +37,10 @@ if [[ "$#" -ne 2 ]]; then
     exit 1
 fi
 
-OS_VERSION=$1
-AVI_CONTROLLER_IP=$2
-VM_NAME="pytest-docker-$OS_VERSION"
+PREFIX=$1
+OS_VERSION=$2
+AVI_CONTROLLER_IP=$3
+VM_NAME="$PREFIX-docker-$OS_VERSION"
 USER_DATA_FILE="docker-vm-init-$OS_VERSION.sh"
 cp ./docker_vm_init-1604.sh ./$USER_DATA_FILE
 

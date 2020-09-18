@@ -58,6 +58,10 @@ fi
 docker run --name=$VERSION-heat -p 9292:9292 -p 35357:35357 \
         -p 8774:8774 -p 5000:5000 -p 8004:8004 -p 9696:9696 \
         -p 8000:8000 \
+        --dns 10.79.16.132 --dns 10.79.16.133 \
+        --dns-search oc.vmware.com \
+        --dns-search eng.vmware.com \
+        --dns-search vmware.com \
         -e OSC_IP=$ENS3_IP -e AVI_IP=AVI_CONTROLLER_IP \
         -e HEAT_REPO='https://github.com/avinetworks/avi-heat' \
         -e HEAT_BRANCH=master -d -t -i "$IMAGE" \

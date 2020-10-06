@@ -20,7 +20,16 @@ cp /root/files/aviuser-openrc.sh /root/
 source /root/admin-openrc.sh
 
 export DEBIAN_FRONTEND=noninteractive
-add-apt-repository -y cloud-archive:rocky
+set +e
+for I in 1 2 3
+do
+    add-apt-repository -y cloud-archive:rocky
+    if [ $? == 0 ]
+    then
+        break
+    fi
+done
+set -e
 apt-get -y update && apt-get -y upgrade && apt-get -y dist-upgrade
 apt-get --yes install software-properties-common
 apt-get install -y python-openstackclient python-pip git

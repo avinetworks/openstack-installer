@@ -10,7 +10,16 @@ source /root/admin-openrc.sh
 export DEBIAN_FRONTEND=noninteractive
 apt-get -y update
 apt-get --yes install software-properties-common
-add-apt-repository -y cloud-archive:queens
+set +e
+for I in 1 2 3
+do
+    add-apt-repository -y cloud-archive:queens
+    if [ $? == 0 ]
+    then
+        break
+    fi
+done
+set -e
 apt-get -y update && apt-get -y dist-upgrade
 apt-get install -y python-openstackclient  python-pip git
 apt-get install -y ssh-client

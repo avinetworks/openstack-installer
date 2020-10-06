@@ -20,7 +20,16 @@ cp /root/files/aviuser-openrc.sh /root/
 source /root/admin-openrc.sh
 
 export DEBIAN_FRONTEND=noninteractive
-add-apt-repository -y cloud-archive:train
+set +e
+for I in 1 2 3
+do
+    add-apt-repository -y cloud-archive:train
+    if [ $? == 0 ]
+    then
+        break
+    fi
+done
+set -e
 apt-get -y update && apt-get -y upgrade && apt-get -y dist-upgrade
 apt-get install -y python3-openstackclient python-pip git
 apt-get install -y ssh-client

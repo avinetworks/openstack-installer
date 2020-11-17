@@ -40,6 +40,8 @@ apt-get -y install docker-ce docker-ce-cli containerd.io
 
 VERSION=OPENSTACK_RELEASE
 ENS3_IP=$(ifconfig ens3 | awk '/inet addr/{print $2}' | cut -d':' -f2)
+DOCKER_USER=DUSER
+DOCKER_PASSWD=DPASS
 
 IMAGE=""
 if [[ $VERSION == "liberty" ]]; then
@@ -55,6 +57,8 @@ if [[ $VERSION < "ocata" ]]; then
     SCRIPT="/root/files/startup"
 fi
 
+echo $DOCKER_PASSWD | docker login --username=$DOCKER_USER --password-stdin
+
 docker run --name=$VERSION-heat -p 9292:9292 -p 35357:35357 \
         -p 8774:8774 -p 5000:5000 -p 8004:8004 -p 9696:9696 \
         -p 8000:8000 \
@@ -69,3 +73,5 @@ docker run --name=$VERSION-heat -p 9292:9292 -p 35357:35357 \
 
 sleep 20
 docker logs $VERSION-heat
+
+docker logout

@@ -32,7 +32,7 @@ if [ -z "$OS_REGION_NAME" ]; then unset OS_REGION_NAME; fi
 export OS_INTERFACE=public
 export OS_IDENTITY_API_VERSION=3
 
-if [[ "$#" -ne 3 ]]; then
+if [[ "$#" -ne 5 ]]; then
     echo "Illegal number of parameters"
     exit 1
 fi
@@ -40,6 +40,8 @@ fi
 PREFIX=$1
 OS_VERSION=$2
 AVI_CONTROLLER_IP=$3
+DUSER=$4
+DPASS=$5
 VM_NAME="$PREFIX-docker-$OS_VERSION"
 USER_DATA_FILE="docker-vm-init-$OS_VERSION.sh"
 cp ./docker_vm_init-1604.sh ./$USER_DATA_FILE
@@ -47,6 +49,8 @@ cp ./docker_vm_init-1604.sh ./$USER_DATA_FILE
 # Replace OS_VERSION and Avi Controller IP
 sed -i "s/OPENSTACK_RELEASE/$OS_VERSION/g" ./$USER_DATA_FILE
 sed -i "s/AVI_CONTROLLER_IP/$AVI_CONTROLLER_IP/g" ./$USER_DATA_FILE
+sed -i "s/DUSER/$DUSER/g" ./$USER_DATA_FILE
+sed -i "s/DPASS/$DPASS/g" ./$USER_DATA_FILE
 openstack server delete $VM_NAME
 sleep 10
 netid=`openstack network show avimgmt -c 'id' --format 'value'`
@@ -57,7 +61,8 @@ openstack server create --flavor m1.large \
     --nic net-id=$netid \
     $VM_NAME
 
-echo "Waiting for VM to come up (20s)..."
-sleep 60
+WAITTIME=60
+echo "Waiting for VM to come up $WAITTIME secs..."
+sleep $WAITTIME
 
 openstack server show $VM_NAME -c addresses -f value | cut -d'=' -f2 >| /tmp/docker-vm-ip

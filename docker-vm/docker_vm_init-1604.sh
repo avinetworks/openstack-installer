@@ -42,16 +42,7 @@ VERSION=OPENSTACK_RELEASE
 ENS3_IP=$(ifconfig ens3 | awk '/inet addr/{print $2}' | cut -d':' -f2)
 DOCKER_USER=DUSER
 DOCKER_PASSWD=DPASS
-
-IMAGE=""
-if [[ $VERSION == "liberty" ]]; then
-    IMAGE="ypraveen/liberty-docker"
-elif [[ $VERSION == "ocata" || $VERSION == "pike" ]]; then
-    IMAGE="ypraveen/$VERSION:latest"
-else
-    IMAGE="avinetworks/$VERSION-heat:latest"
-fi
-
+IMAGE="avinetworks/$VERSION-heat:latest"
 SCRIPT="/root/install_scripts/startup"
 if [[ $VERSION < "ocata" ]]; then
     SCRIPT="/root/files/startup"

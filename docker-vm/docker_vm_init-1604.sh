@@ -4,7 +4,8 @@ echo "ubuntu:avi123" | chpasswd
 echo "root:avi123" | chpasswd
 
 export DEBIAN_FRONTEND=noninteractive
-apt-get -y update && apt-get -y upgrade && apt-get -y dist-upgrade
+apt-get -y update && apt-get -y upgrade
+apt autoremove -y
 
 # enable Password authentication and root login
 # set root password to avi123

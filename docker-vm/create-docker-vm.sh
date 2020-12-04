@@ -40,6 +40,7 @@ fi
 PREFIX=$1
 OS_VERSION=$2
 AVI_CONTROLLER_IP=$3
+# TODO: Folowing two are unused; remove in future
 DUSER=$4
 DPASS=$5
 VM_NAME="$PREFIX-docker-$OS_VERSION"
@@ -49,8 +50,6 @@ cp ./docker_vm_init-1604.sh ./$USER_DATA_FILE
 # Replace OS_VERSION and Avi Controller IP
 sed -i "s/OPENSTACK_RELEASE/$OS_VERSION/g" ./$USER_DATA_FILE
 sed -i "s/AVI_CONTROLLER_IP/$AVI_CONTROLLER_IP/g" ./$USER_DATA_FILE
-sed -i "s/DUSER/$DUSER/g" ./$USER_DATA_FILE
-sed -i "s/DPASS/$DPASS/g" ./$USER_DATA_FILE
 openstack server delete $VM_NAME
 sleep 10
 netid=`openstack network show avimgmt -c 'id' --format 'value'`

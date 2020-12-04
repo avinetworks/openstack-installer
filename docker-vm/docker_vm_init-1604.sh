@@ -36,19 +36,20 @@ apt-get -y update
 apt-get -y install docker-ce docker-ce-cli containerd.io
 
 
+####### ADD LOCAL REPO ##########
+echo -e "{\n    \"insecure-registries\": [\"10.50.66.233:5000\"]\n}\n" >| /etc/docker/daemon.json
+service docker restart
+
+
 ####### RUN OS CONTAINER ########
 
 VERSION=OPENSTACK_RELEASE
 ENS3_IP=$(ifconfig ens3 | awk '/inet addr/{print $2}' | cut -d':' -f2)
-DOCKER_USER=DUSER
-DOCKER_PASSWD=DPASS
-IMAGE="avinetworks/$VERSION-heat:latest"
+IMAGE="10.50.66.233:5000/avinetworks/$VERSION-heat:latest"
 SCRIPT="/root/install_scripts/startup"
 if [[ $VERSION < "ocata" ]]; then
     SCRIPT="/root/files/startup"
 fi
-
-echo $DOCKER_PASSWD | docker login --username=$DOCKER_USER --password-stdin
 
 docker run --name=$VERSION-heat -p 9292:9292 -p 35357:35357 \
         -p 8774:8774 -p 5000:5000 -p 8004:8004 -p 9696:9696 \

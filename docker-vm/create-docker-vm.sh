@@ -26,7 +26,7 @@ if [[ "$#" -ne 5 ]]; then
 fi
 
 ##### Upload latest image ####
-wget https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
+wget https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img --no-check-certificate
 openstack image delete xenial-current
 openstack image create --file xenial-server-cloudimg-amd64-disk1.img --container-format bare --disk-format qcow2 xenial-current
 rm -f xenial-server-cloudimg-amd64-disk1.img

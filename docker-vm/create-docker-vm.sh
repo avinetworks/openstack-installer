@@ -56,4 +56,6 @@ WAITTIME=60
 echo "Waiting for VM to come up $WAITTIME secs..."
 sleep $WAITTIME
 
-openstack server show $VM_NAME -c addresses -f value | cut -d'=' -f2 >| /tmp/docker-vm-ip
+openstack server show $VM_NAME -c addresses -f json | \
+    python3 -c "import sys, json; print(json.load(sys.stdin)['addresses']['avimgmt'][0])" \
+    | tr -d '\n' >| /tmp/docker-vm-ip

@@ -15,6 +15,9 @@ sed -i "/nameserver/d" /etc/resolv.conf
 sed -i "/search/d" /etc/resolv.conf
 echo "nameserver 10.142.7.1" >> /etc/resolv.conf
 
+# Force IPv4
+echo 'Acquire::ForceIPv4 "true";' | sudo tee /etc/apt/apt.conf.d/99force-ipv4
+
 apt-get update
 apt-get install --force-yes -y nginx
 

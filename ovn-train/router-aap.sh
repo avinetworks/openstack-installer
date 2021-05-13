@@ -4,6 +4,7 @@ interface="ens4"
 ip_pref=`cat /root/$interface | grep "inet" | grep -v "inet6" | awk '{split($2, b, "."); printf("%s.%s.", b[1], b[2]);}'`
 cidr=${ip_pref}0.0/16
 
+source /root/files/admin-openrc.sh
 
 mac_address=`openstack port list | grep ${ip_pref}0. | grep ACTIVE | awk '{print $5;}'`
 macs=$(echo $mac_address | tr " " "\n")

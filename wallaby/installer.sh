@@ -181,10 +181,12 @@ openstack endpoint create --region RegionOne network public http://$my_ip:9696
 openstack endpoint create --region RegionOne network internal http://$my_ip:9696
 openstack endpoint create --region RegionOne network admin http://$my_ip:9696
 apt-get -y install neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-dhcp-agent neutron-metadata-agent neutron-l3-agent
+cp /root/files/radvd.conf /etc/
 cp /root/files/neutron.conf /etc/neutron/
 cp /root/files/neutron.policy.json /etc/neutron/
 cp /root/files/ml2_conf.ini /etc/neutron/plugins/ml2/
 cp /root/files/linuxbridge_agent.ini /etc/neutron/plugins/ml2/
+touch /etc/neutron/fwaas_driver.ini
 sed -i s/OVERLAY_INTERFACE_IP_ADDRESS/$my_ip/g /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 cp /root/files/l3_agent.ini /etc/neutron/
 cp /root/files/dhcp_agent.ini /etc/neutron/
@@ -228,7 +230,7 @@ openstack role add --domain heat --user-domain heat --user heat_domain_admin adm
 openstack role create heat_stack_owner
 openstack role add --project demo --user demo heat_stack_owner
 openstack role create heat_stack_user
-apt-get install heat-api heat-api-cfn heat-engine -y
+apt-get install heat-api heat-api-cfn heat-engine python3-zunclient python3-vitrageclient -y
 cp /root/files/heat.conf /etc/heat/
 su -s /bin/sh -c "heat-manage db_sync" heat
 
